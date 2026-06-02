@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Animal Info — National Parks Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .page-hero { height:50vh; min-height:340px; background:url('https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=1600&q=80') center/cover; position:relative; display:flex; align-items:center; justify-content:center; text-align:center; }
+    .page-hero::before { content:''; position:absolute; inset:0; background:rgba(10,30,10,0.65); }
+    .page-hero-content { position:relative; z-index:1; color:var(--white); }
+    .page-hero-content h1 { font-family:var(--font-display); font-size:clamp(2.2rem,5vw,3.8rem); letter-spacing:0.08em; }
+    .breadcrumb { display:flex; justify-content:center; gap:8px; align-items:center; color:rgba(255,255,255,0.5); font-size:0.82rem; margin-top:1rem; }
+    .breadcrumb a { color:var(--green-light); }
+
+    .category-tabs { display:flex; justify-content:center; gap:0.6rem; flex-wrap:wrap; margin-bottom:3rem; }
+    .cat-tab { padding:10px 24px; border-radius:30px; border:2px solid var(--green-pale); background:transparent; font-size:0.82rem; font-weight:700; cursor:pointer; font-family:var(--font-body); color:var(--green-dark); transition:var(--transition); display:flex; align-items:center; gap:6px; }
+    .cat-tab.active,.cat-tab:hover { background:var(--green-mid); border-color:var(--green-mid); color:var(--white); }
+
+    .animal-detail-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:2rem; max-width:1400px; margin:0 auto; }
+    .animal-detail-card { border-radius:var(--radius-lg); overflow:hidden; background:var(--white); box-shadow:0 4px 20px rgba(0,0,0,0.07); transition:var(--transition); }
+    .animal-detail-card:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(26,58,26,0.12); }
+    .adc-img { height:240px; overflow:hidden; position:relative; }
+    .adc-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+    .animal-detail-card:hover .adc-img img { transform:scale(1.06); }
+    .adc-status { position:absolute; top:1rem; right:1rem; font-size:0.68rem; font-weight:700; padding:4px 12px; border-radius:20px; text-transform:uppercase; letter-spacing:0.06em; }
+    .status-endangered { background:rgba(220,50,50,0.85); color:#fff; }
+    .status-vulnerable { background:rgba(220,140,0,0.85); color:#fff; }
+    .status-least { background:rgba(50,150,50,0.85); color:#fff; }
+    .adc-body { padding:1.5rem; }
+    .adc-category { font-size:0.68rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--green-mid); margin-bottom:4px; }
+    .adc-name { font-family:var(--font-heading); font-size:1.3rem; color:var(--green-dark); margin-bottom:4px; }
+    .adc-sci { font-style:italic; font-size:0.78rem; color:#999; margin-bottom:0.8rem; }
+    .adc-desc { color:#666; font-size:0.84rem; line-height:1.7; margin-bottom:1rem; }
+    .adc-facts { display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-bottom:1rem; }
+    .adc-fact { background:#f5f8f5; border-radius:6px; padding:8px 10px; }
+    .adc-fact-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--green-mid); }
+    .adc-fact-value { font-size:0.82rem; color:var(--green-dark); font-weight:600; }
+    .adc-parks { display:flex; flex-wrap:wrap; gap:4px; }
+    .adc-park-tag { background:rgba(82,183,136,0.1); border:1px solid var(--green-pale); color:var(--green-dark); font-size:0.7rem; padding:3px 10px; border-radius:20px; }
+
+    /* Rare Species spotlight */
+    .rare-spotlight { background:linear-gradient(135deg,var(--green-dark),#0a2010); padding:100px 2rem; }
+    .rare-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.5rem; max-width:1300px; margin:0 auto; }
+    .rare-card { border-radius:var(--radius); overflow:hidden; position:relative; height:320px; }
+    .rare-card img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+    .rare-card:hover img { transform:scale(1.08); }
+    .rare-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 55%); display:flex; flex-direction:column; justify-content:flex-end; padding:1.5rem; }
+    .rare-icon { font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#ff6b6b; margin-bottom:4px; }
+    .rare-name { font-family:var(--font-heading); color:var(--white); font-size:1.2rem; margin-bottom:6px; }
+    .rare-desc { color:rgba(255,255,255,0.7); font-size:0.78rem; line-height:1.5; max-height:0; overflow:hidden; transition:max-height 0.4s; }
+    .rare-card:hover .rare-desc { max-height:100px; }
+
+    /* Birds section */
+    .birds-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.5rem; max-width:1300px; margin:0 auto; }
+    .bird-card { background:var(--white); border-radius:var(--radius); overflow:hidden; box-shadow:0 3px 15px rgba(0,0,0,0.07); transition:var(--transition); text-align:center; }
+    .bird-card:hover { transform:translateY(-5px); }
+    .bird-img { height:180px; overflow:hidden; }
+    .bird-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
+    .bird-card:hover .bird-img img { transform:scale(1.08); }
+    .bird-info { padding:1rem; }
+    .bird-name { font-family:var(--font-heading); color:var(--green-dark); font-size:1rem; }
+    .bird-region { color:var(--green-mid); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin:4px 0; }
+    .bird-note { color:#888; font-size:0.78rem; }
+  </style>
+</head>
+<body>
+
+<div id="loader"><div class="loader-logo">🌿 NATIONAL PARKS</div><div class="loader-bar"><div class="loader-bar-fill"></div></div></div>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="logo-icon">🌲</div><div class="logo-text">National Parks<span>Explore the Wild</span></div></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="parks.html">Parks List</a></li>
+      <li><a href="animal-info.html" class="active">Animal Info</a></li>
+      <li><a href="sitemap.html">Site Map</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <div class="hero-badge" style="margin:0 auto 1rem"><i class="fas fa-paw"></i> Wildlife Encyclopedia</div>
+    <h1>Animal Information</h1>
+    <p>Learn about the incredible creatures that inhabit national parks</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> <i class="fas fa-chevron-right" style="font-size:0.6rem"></i> <span>Animal Info</span></div>
+  </div>
+</div>
+
+<!-- MAMMALS -->
+<section style="background:var(--cream); padding:80px 2rem;">
+  <div class="section-header">
+    <div class="section-tag">Mammals</div>
+    <h2 class="section-title">Famous <em>Mammals</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc">The iconic large mammals that define national park experiences worldwide.</p>
+  </div>
+  <div class="category-tabs">
+    <button class="cat-tab active" data-cat="all">🌍 All Animals</button>
+    <button class="cat-tab" data-cat="mammal">🦁 Mammals</button>
+    <button class="cat-tab" data-cat="bird">🦅 Birds</button>
+    <button class="cat-tab" data-cat="reptile">🐍 Reptiles</button>
+    <button class="cat-tab" data-cat="marine">🐠 Marine</button>
+  </div>
+  <div class="animal-detail-grid" id="animalGrid">
+
+    <div class="animal-detail-card reveal" data-cat="mammal">
+      <div class="adc-img"><img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=600&q=80" alt="Lion" loading="lazy" /><span class="adc-status status-vulnerable">Vulnerable</span></div>
+      <div class="adc-body"><div class="adc-category">🦁 Big Cat — Mammal</div><div class="adc-name">African Lion</div><div class="adc-sci">Panthera leo</div><p class="adc-desc">The king of the African savanna lives in prides of up to 40 individuals. Males are recognizable by their distinctive manes. Lions are the only truly social cats and coordinate hunts as a group.</p><div class="adc-facts"><div class="adc-fact"><div class="adc-fact-label">Weight</div><div class="adc-fact-value">120–250 kg</div></div><div class="adc-fact"><div class="adc-fact-label">Lifespan</div><div class="adc-fact-value">10–14 years</div></div><div class="adc-fact"><div class="adc-fact-label">Speed</div><div class="adc-fact-value">80 km/h</div></div><div class="adc-fact"><div class="adc-fact-label">Diet</div><div class="adc-fact-value">Carnivore</div></div></div><div class="adc-parks"><span class="adc-park-tag">🌍 Serengeti NP</span><span class="adc-park-tag">🌍 Kruger NP</span><span class="adc-park-tag">🌍 Maasai Mara</span></div></div>
+    </div>
+
+    <div class="animal-detail-card reveal reveal-delay-1" data-cat="mammal">
+      <div class="adc-img"><img src="https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=600&q=80" alt="Tiger" loading="lazy" /><span class="adc-status status-endangered">Endangered</span></div>
+      <div class="adc-body"><div class="adc-category">🐯 Big Cat — Mammal</div><div class="adc-name">Bengal Tiger</div><div class="adc-sci">Panthera tigris tigris</div><p class="adc-desc">The world's largest wild cat and an apex predator. Bengal tigers are solitary and territorial, hunting deer and wild boar. Only about 2,500 remain in the wild, primarily in India's protected areas.</p><div class="adc-facts"><div class="adc-fact"><div class="adc-fact-label">Weight</div><div class="adc-fact-value">150–300 kg</div></div><div class="adc-fact"><div class="adc-fact-label">Lifespan</div><div class="adc-fact-value">8–10 years</div></div><div class="adc-fact"><div class="adc-fact-label">Speed</div><div class="adc-fact-value">65 km/h</div></div><div class="adc-fact"><div class="adc-fact-label">Diet</div><div class="adc-fact-value">Carnivore</div></div></div><div class="adc-parks"><span class="adc-park-tag">🇮🇳 Jim Corbett NP</span><span class="adc-park-tag">🇮🇳 Ranthambore NP</span><span class="adc-park-tag">🇮🇳 Sundarbans</span></div></div>
+    </div>
+
+    <div class="animal-detail-card reveal reveal-delay-2" data-cat="mammal">
+      <div class="adc-img"><img src="https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=600&q=80" alt="Elephant" loading="lazy" /><span class="adc-status status-vulnerable">Vulnerable</span></div>
+      <div class="adc-body"><div class="adc-category">🐘 Pachyderm — Mammal</div><div class="adc-name">African Elephant</div><div class="adc-sci">Loxodonta africana</div><p class="adc-desc">Earth's largest land animal and a keystone species. Elephants are highly intelligent and form deep social bonds. They are ecosystem engineers, shaping landscapes by creating water holes and clearing paths through forests.</p><div class="adc-facts"><div class="adc-fact"><div class="adc-fact-label">Weight</div><div class="adc-fact-value">4,000–7,000 kg</div></div><div class="adc-fact"><div class="adc-fact-label">Lifespan</div><div class="adc-fact-value">60–70 years</div></div><div class="adc-fact"><div class="adc-fact-label">Height</div><div class="adc-fact-value">3.3 m</div></div><div class="adc-fact"><div class="adc-fact-label">Diet</div><div class="adc-fact-value">Herbivore</div></div></div><div class="adc-parks"><span class="adc-park-tag">🌍 Amboseli NP</span><span class="adc-park-tag">🌍 Kruger NP</span><span class="adc-park-tag">🇮🇳 Corbett NP</span></div></div>
+    </div>
+
+    <div class="animal-detail-card reveal" data-cat="mammal">
+      <div class="adc-img"><img src="https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&q=80" alt="Fox" loading="lazy" /><span class="adc-status status-least">Least Concern</span></div>
+      <div class="adc-body"><div class="adc-category">🦊 Canid — Mammal</div><div class="adc-name">Red Fox</div><div class="adc-sci">Vulpes vulpes</div><p class="adc-desc">The most widely distributed wild carnivore in the world. Red foxes are remarkably adaptable, thriving in habitats from arctic tundra to desert, from wilderness to urban edges. Known for their cunning and intelligence.</p><div class="adc-facts"><div class="adc-fact"><div class="adc-fact-label">Weight</div><div class="adc-fact-value">3–11 kg</div></div><div class="adc-fact"><div class="adc-fact-label">Lifespan</div><div class="adc-fact-value">2–5 years</div></div><div class="adc-fact"><div class="adc-fact-label">Speed</div><div class="adc-fact-value">48 km/h</div></div><div class="adc-fact"><div class="adc-fact-label">Diet</div><div class="adc-fact-value">Omnivore</div></div></div><div class="adc-parks"><span class="adc-park-tag">🇺🇸 Yellowstone NP</span><span class="adc-park-tag">🇨🇦 Banff NP</span><span class="adc-park-tag">🇬🇧 Dartmoor NP</span></div></div>
+    </div>
+
+    <div class="animal-detail-card reveal reveal-delay-1" data-cat="mammal">
+      <div class="adc-img"><img src="https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=600&q=80" alt="Gorilla" loading="lazy" /><span class="adc-status status-endangered">Endangered</span></div>
+      <div class="adc-body"><div class="adc-category">🦍 Primate — Mammal</div><div class="adc-name">Mountain Gorilla</div><div class="adc-sci">Gorilla beringei beringei</div><p class="adc-desc">Our closest living relatives, sharing 98.3% of human DNA. Mountain gorillas live in family groups led by a dominant silverback male. Once on the brink of extinction, conservation efforts have slowly increased their numbers to over 1,000.</p><div class="adc-facts"><div class="adc-fact"><div class="adc-fact-label">Weight</div><div class="adc-fact-value">140–200 kg</div></div><div class="adc-fact"><div class="adc-fact-label">Lifespan</div><div class="adc-fact-value">35–40 years</div></div><div class="adc-fact"><div class="adc-fact-label">Height</div><div class="adc-fact-value">1.5–1.8 m</div></div><div class="adc-fact"><div class="adc-fact-label">Diet</div><div class="adc-fact-value">Herbivore</div></div></div><div class="adc-parks"><span class="adc-park-tag">🇺🇬 Bwindi Forest</span><span class="adc-park-tag">🇨🇩 Virunga NP</span></div></div>
+    </div>
+
+    <div class="animal-detail-card reveal reveal-delay-2" data-cat="reptile">
+      <div class="adc-img"><img src="https://images.unsplash.com/photo-1612178537253-bccd437b730e?w=600&q=80" alt="Crocodile" loading="lazy" /><span class="adc-status status-least">Least Concern</span></div>
+      <div class="adc-body"><div class="adc-category">🐊 Reptile</div><div class="adc-name">Nile Crocodile</div><div class="adc-sci">Crocodylus niloticus</div><p class="adc-desc">Africa's largest reptile and the world's second largest crocodile. Nile crocodiles are ambush predators that have remained largely unchanged for 200 million years, earning the title "living fossils." They play a crucial role in aquatic ecosystems.</p><div class="adc-facts"><div class="adc-fact"><div class="adc-fact-label">Weight</div><div class="adc-fact-value">225–750 kg</div></div><div class="adc-fact"><div class="adc-fact-label">Lifespan</div><div class="adc-fact-value">70–100 years</div></div><div class="adc-fact"><div class="adc-fact-label">Length</div><div class="adc-fact-value">4–6 m</div></div><div class="adc-fact"><div class="adc-fact-label">Diet</div><div class="adc-fact-value">Carnivore</div></div></div><div class="adc-parks"><span class="adc-park-tag">🌍 Serengeti NP</span><span class="adc-park-tag">🌍 Okavango Delta</span></div></div>
+    </div>
+
+    <div class="animal-detail-card reveal" data-cat="marine">
+      <div class="adc-img"><img src="https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=600&q=80" alt="Sea Turtle" loading="lazy" /><span class="adc-status status-vulnerable">Vulnerable</span></div>
+      <div class="adc-body"><div class="adc-category">🐢 Marine Reptile</div><div class="adc-name">Green Sea Turtle</div><div class="adc-sci">Chelonia mydas</div><p class="adc-desc">One of the largest sea turtles and among the most ancient creatures on Earth, having navigated the oceans for 100 million years. Green sea turtles are critical to maintaining healthy seagrass beds and coral reef ecosystems.</p><div class="adc-facts"><div class="adc-fact"><div class="adc-fact-label">Weight</div><div class="adc-fact-value">110–190 kg</div></div><div class="adc-fact"><div class="adc-fact-label">Lifespan</div><div class="adc-fact-value">80+ years</div></div><div class="adc-fact"><div class="adc-fact-label">Length</div><div class="adc-fact-value">1.2 m</div></div><div class="adc-fact"><div class="adc-fact-label">Diet</div><div class="adc-fact-value">Herbivore</div></div></div><div class="adc-parks"><span class="adc-park-tag">🇦🇺 Great Barrier Reef</span><span class="adc-park-tag">🌊 Coral Sea</span></div></div>
+    </div>
+
+    <div class="animal-detail-card reveal reveal-delay-1" data-cat="marine">
+      <div class="adc-img"><img src="https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=600&q=80" alt="Whale Shark" loading="lazy" /><span class="adc-status status-endangered">Endangered</span></div>
+      <div class="adc-body"><div class="adc-category">🦈 Marine — Fish</div><div class="adc-name">Whale Shark</div><div class="adc-sci">Rhincodon typus</div><p class="adc-desc">The world's largest fish — a gentle giant reaching up to 12 meters in length. Despite their imposing size, whale sharks are filter feeders that subsist entirely on tiny plankton and small fish. They migrate thousands of kilometers annually.</p><div class="adc-facts"><div class="adc-fact"><div class="adc-fact-label">Weight</div><div class="adc-fact-value">Up to 18,000 kg</div></div><div class="adc-fact"><div class="adc-fact-label">Lifespan</div><div class="adc-fact-value">70–150 years</div></div><div class="adc-fact"><div class="adc-fact-label">Length</div><div class="adc-fact-value">5.5–12 m</div></div><div class="adc-fact"><div class="adc-fact-label">Diet</div><div class="adc-fact-value">Filter Feeder</div></div></div><div class="adc-parks"><span class="adc-park-tag">🇦🇺 Ningaloo Reef</span><span class="adc-park-tag">🇲🇻 Maldives MPA</span></div></div>
+    </div>
+
+    <div class="animal-detail-card reveal reveal-delay-2" data-cat="bird">
+      <div class="adc-img"><img src="b.jpg" alt="Bald Eagle" loading="lazy" /><span class="adc-status status-least">Least Concern</span></div>
+      <div class="adc-body"><div class="adc-category">🦅 Raptor — Bird</div><div class="adc-name">Bald Eagle</div><div class="adc-sci">Haliaeetus leucocephalus</div><p class="adc-desc">The national bird and symbol of the United States. Bald Eagles are powerful hunters and skilled fishers, diving feet-first to snatch fish from water. Once endangered due to DDT, their recovery is one of conservation's greatest success stories.</p><div class="adc-facts"><div class="adc-fact"><div class="adc-fact-label">Wingspan</div><div class="adc-fact-value">1.8–2.4 m</div></div><div class="adc-fact"><div class="adc-fact-label">Lifespan</div><div class="adc-fact-value">20–30 years</div></div><div class="adc-fact"><div class="adc-fact-label">Speed</div><div class="adc-fact-value">120–160 km/h</div></div><div class="adc-fact"><div class="adc-fact-label">Diet</div><div class="adc-fact-value">Carnivore</div></div></div><div class="adc-parks"><span class="adc-park-tag">🇺🇸 Yellowstone NP</span><span class="adc-park-tag">🇺🇸 Olympic NP</span></div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- RARE SPECIES -->
+<section class="rare-spotlight">
+  <div class="section-header">
+    <div class="section-tag" style="background:rgba(255,100,100,0.15);color:#ff8080;border-color:rgba(255,100,100,0.3)">⚠️ Critical</div>
+    <h2 class="section-title" style="color:var(--white)">Rare & <em style="color:#ff8080">Endangered</em> Species</h2>
+    <div class="section-line" style="background:linear-gradient(to right,#ff6b6b,#ffd700)"></div>
+    <p class="section-desc" style="color:rgba(255,255,255,0.6)">Species on the brink — whose survival depends on protected park habitats.</p>
+  </div>
+  <div class="rare-grid">
+    <div class="rare-card reveal"><img src="https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=500&q=80" alt="Mountain Gorilla" loading="lazy" /><div class="rare-overlay"><div class="rare-icon">⚠️ Endangered</div><div class="rare-name">Mountain Gorilla</div><div class="rare-desc">Only ~1,000 remain in the wild. Found in Bwindi Impenetrable Forest, Uganda and Virunga NP, Congo.</div></div></div>
+    <div class="rare-card reveal reveal-delay-1"><img src="https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=500&q=80" alt="Bengal Tiger" loading="lazy" /><div class="rare-overlay"><div class="rare-icon">⚠️ Endangered</div><div class="rare-name">Bengal Tiger</div><div class="rare-desc">Fewer than 2,500 survive in the wild. Protected primarily in India's Tiger Reserves and national parks.</div></div></div>
+    <div class="rare-card reveal reveal-delay-2"><img src="https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=500&q=80" alt="Snow Leopard" loading="lazy" /><div class="rare-overlay"><div class="rare-icon">⚠️ Vulnerable</div><div class="rare-name">Snow Leopard</div><div class="rare-desc">Estimated 4,000–6,500 in the wild. Roams the high mountains of Central Asia in extreme isolation.</div></div></div>
+    <div class="rare-card reveal reveal-delay-3"><img src="https://images.unsplash.com/photo-1559827291-72ee739d0d9a?w=500&q=80" alt="Whale Shark" loading="lazy" /><div class="rare-overlay"><div class="rare-icon">⚠️ Endangered</div><div class="rare-name">Whale Shark</div><div class="rare-desc">Populations declining due to fishing and boat strikes. Protected in marine national parks worldwide.</div></div></div>
+  </div>
+</section>
+
+<!-- BIRDS -->
+<section style="background:var(--cream); padding:100px 2rem;">
+  <div class="section-header">
+    <div class="section-tag">Avian Wildlife</div>
+    <h2 class="section-title">Birds of the <em>Parks</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc">National parks are among the world's premier bird-watching destinations.</p>
+  </div>
+  <div class="birds-grid">
+    <div class="bird-card reveal"><div class="bird-img"><img src="https://images.unsplash.com/photo-1607153333879-c174d265f1d2?w=400&q=80" alt="Flamingo" loading="lazy" /></div><div class="bird-info"><div class="bird-name">Flamingo</div><div class="bird-region">🌍 Africa • Asia</div><div class="bird-note">Forms massive colonies. Famous at Lake Nakuru, Kenya.</div></div></div>
+    <div class="bird-card reveal reveal-delay-1"><div class="bird-img"><img src="https://th.bing.com/th/id/OIP.2WuT5bIqaA7bx5J6-p_U1wHaFO?w=236&c=11&rs=1&qlt=90&bgcl=ececec&o=6&pid=PersonalBing&p=0" alt="Eagle" loading="lazy" /></div><div class="bird-info"><div class="bird-name">Bald Eagle</div><div class="bird-region">🇺🇸 North America</div><div class="bird-note">National bird of the USA. Expert fisherman with 2.4m wingspan.</div></div></div>
+    <div class="bird-card reveal reveal-delay-2"><div class="bird-img"><img src="https://www.bing.com/images/search?view=detailV2&ccid=h%2f7CjoSR&id=100E2A42B81ACD1F732F05091AA3D849BDF8BB0A&thid=OIP.h_7CjoSR_qynya6oadG0yAHaEK&mediaurl=https%3a%2f%2fwww.hdwallpapers.in%2fdownload%2fcolorful_bird_toucan_perching_lush_rainforest_beak_branch_surrounded_by_vibrant_tropical_foliage_hd_birds-1920x1080.jpg&cdnurl=https%3a%2f%2fth.bing.com%2fth%2fid%2fR.87fec28e8491feaca7c9aea869d1b4c8%3frik%3dCrv4vUnYoxoJBQ%26pid%3dImgRaw%26r%3d0&exph=1080&expw=1920&q=toucon&FORM=IRPRST&ck=009EA00AC9A6794CC964DF1BE9B3B8F4&selectedIndex=0&itb=0" alt="Toucan" loading="lazy" /></div><div class="bird-info"><div class="bird-name">Toucan</div><div class="bird-region">🌎 South America</div><div class="bird-note">Iconic Amazon bird with an oversized colorful bill.</div></div></div>
+    <div class="bird-card reveal reveal-delay-3"><div class="bird-img"><img src="https://images.unsplash.com/photo-1444464666168-49d633b86797?w=400&q=80" alt="Owl" loading="lazy" /></div><div class="bird-info"><div class="bird-name">Great Horned Owl</div><div class="bird-region">🌎 Americas</div><div class="bird-note">Apex nocturnal predator found across Yellowstone and Banff.</div></div></div>
+    <div class="bird-card reveal"><div class="bird-img"><img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=400&q=80" alt="Peacock" loading="lazy" /></div><div class="bird-info"><div class="bird-name">Indian Peacock</div><div class="bird-region">🇮🇳 South Asia</div><div class="bird-note">National bird of India. Elaborate tail used in courtship displays.</div></div></div>
+    <div class="bird-card reveal reveal-delay-1"><div class="bird-img"><img src="https://images.unsplash.com/photo-1539136788836-5699e78bfc75?w=400&q=80" alt="Parrot" loading="lazy" /></div><div class="bird-info"><div class="bird-name">Scarlet Macaw</div><div class="bird-region">🌎 Central/South America</div><div class="bird-note">Vibrant tropical parrot found in Amazon and Costa Rica parks.</div></div></div>
+    <div class="bird-card reveal reveal-delay-2"><div class="bird-img"><img src="https://images.unsplash.com/photo-1578326457399-3b34dbbf23b8?w=400&q=80" alt="Pelican" loading="lazy" /></div><div class="bird-info"><div class="bird-name">Brown Pelican</div><div class="bird-region">🌊 Coastal Americas</div><div class="bird-note">Spectacular diver; plunges from 10m height to catch fish.</div></div></div>
+    <div class="bird-card reveal reveal-delay-3"><div class="bird-img"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt="Heron" loading="lazy" /></div><div class="bird-info"><div class="bird-name">Grey Heron</div><div class="bird-region">🌍 Europe • Asia • Africa</div><div class="bird-note">Patient stalker of fish. Found along rivers in parks worldwide.</div></div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><div class="nav-logo" style="margin-bottom:1rem"><div class="logo-icon">🌲</div><div class="logo-text">National Parks<span>Explore the Wild</span></div></div><p>Your digital gateway to the world's most magnificent natural treasures.</p></div>
+    <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="parks.html">Parks List</a></li><li><a href="animal-info.html">Animal Info</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Animals</h4><ul><li><a href="#">Big Cats</a></li><li><a href="#">Elephants</a></li><li><a href="#">Primates</a></li><li><a href="#">Marine Life</a></li><li><a href="#">Birds</a></li><li><a href="#">Reptiles</a></li></ul></div>
+    <div class="footer-col"><h4>Conservation</h4><ul><li><a href="#">Endangered Species</a></li><li><a href="#">Vulnerable Species</a></li><li><a href="#">Success Stories</a></li><li><a href="#">How to Help</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 National Parks Portal. Made with 🌿 for nature lovers worldwide.</p></div>
+</footer>
+
+<button id="back-top"><i class="fas fa-arrow-up"></i></button>
+<script src="script.js"></script>
+<script>
+document.querySelectorAll('.cat-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const cat = tab.dataset.cat;
+    document.querySelectorAll('#animalGrid .animal-detail-card').forEach(card => {
+      card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+    });
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us — National Parks Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ── PAGE HERO ── */
+    .page-hero {
+      height: 52vh; min-height: 360px;
+      background: url('https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=1600&q=80') center/cover;
+      position: relative; display: flex; align-items: center; justify-content: center; text-align: center;
+    }
+    .page-hero::before { content:''; position:absolute; inset:0; background:rgba(10,30,10,0.65); }
+    .page-hero-content { position:relative; z-index:1; color:var(--white); }
+    .page-hero-content h1 { font-family:var(--font-display); font-size:clamp(2.2rem,5vw,3.8rem); letter-spacing:0.08em; }
+    .page-hero-content p { color:rgba(255,255,255,0.75); font-size:1.05rem; margin-top:0.6rem; }
+    .breadcrumb { display:flex; justify-content:center; gap:8px; align-items:center; color:rgba(255,255,255,0.45); font-size:0.82rem; margin-top:1rem; }
+    .breadcrumb a { color:var(--green-light); }
+
+    /* ── INFO CARDS ── */
+    .info-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:1.5rem; max-width:1100px; margin:0 auto 4rem; }
+    .info-card {
+      background:var(--white); border-radius:var(--radius-lg); padding:2rem 1.5rem;
+      text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.07);
+      border-top:4px solid var(--green-light); transition:var(--transition);
+    }
+    .info-card:hover { transform:translateY(-6px); box-shadow:0 14px 35px rgba(26,58,26,0.12); }
+    .info-card-icon {
+      width:60px; height:60px; border-radius:50%;
+      background:linear-gradient(135deg,var(--green-light),var(--green-mid));
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.5rem; margin:0 auto 1.2rem; color:var(--white);
+    }
+    .info-card h4 { font-family:var(--font-heading); color:var(--green-dark); font-size:1.05rem; margin-bottom:0.5rem; }
+    .info-card p { color:#777; font-size:0.85rem; line-height:1.65; }
+    .info-card a { color:var(--green-mid); font-weight:600; }
+    .info-card a:hover { color:var(--green-dark); }
+
+    /* ── MAIN CONTACT SECTION ── */
+    .contact-main { display:grid; grid-template-columns:1fr 1.6fr; gap:4rem; max-width:1200px; margin:0 auto; }
+
+    /* Left panel */
+    .contact-left h2 { font-family:var(--font-heading); font-size:2rem; color:var(--green-dark); margin-bottom:0.8rem; }
+    .contact-left p { color:#666; line-height:1.8; margin-bottom:2rem; font-size:0.95rem; }
+
+    .contact-detail { display:flex; gap:1rem; margin-bottom:1.4rem; align-items:flex-start; }
+    .cd-icon {
+      width:50px; height:50px; flex-shrink:0;
+      background:rgba(82,183,136,0.12); border:1px solid var(--green-pale);
+      border-radius:12px; display:flex; align-items:center; justify-content:center;
+      font-size:1.2rem; color:var(--green-mid);
+    }
+    .cd-label { font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--green-mid); }
+    .cd-value { color:var(--green-dark); font-size:0.92rem; margin-top:3px; line-height:1.5; }
+    .cd-value a { color:var(--green-mid); }
+    .cd-value a:hover { color:var(--green-dark); text-decoration:underline; }
+
+    .contact-socials { display:flex; gap:10px; margin-top:2rem; }
+    .cs-link {
+      width:42px; height:42px; border-radius:50%;
+      background:rgba(82,183,136,0.1); border:2px solid var(--green-pale);
+      display:flex; align-items:center; justify-content:center;
+      color:var(--green-mid); font-size:1rem; transition:var(--transition);
+    }
+    .cs-link:hover { background:var(--green-mid); border-color:var(--green-mid); color:var(--white); transform:translateY(-3px); }
+
+    /* Hours table */
+    .hours-table { width:100%; border-collapse:collapse; margin-top:1.5rem; font-size:0.85rem; }
+    .hours-table tr { border-bottom:1px solid #eee; }
+    .hours-table tr:last-child { border-bottom:none; }
+    .hours-table td { padding:8px 4px; color:#666; }
+    .hours-table td:first-child { font-weight:700; color:var(--green-dark); }
+    .hours-table td:last-child { text-align:right; }
+    .open-badge { background:rgba(82,183,136,0.12); color:var(--green-mid); font-size:0.65rem; font-weight:700; padding:2px 8px; border-radius:10px; letter-spacing:0.05em; }
+    .closed-badge { background:#f5f5f5; color:#aaa; font-size:0.65rem; font-weight:700; padding:2px 8px; border-radius:10px; }
+
+    /* Right panel — form */
+    .contact-form-panel {
+      background:var(--white); border-radius:var(--radius-lg);
+      padding:3rem; box-shadow:0 8px 40px rgba(0,0,0,0.08);
+    }
+    .cf-header { margin-bottom:2rem; }
+    .cf-header h3 { font-family:var(--font-heading); color:var(--green-dark); font-size:1.6rem; }
+    .cf-header p { color:#888; font-size:0.88rem; margin-top:4px; }
+
+    .form-group { margin-bottom:1.2rem; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    label { display:block; font-size:0.72rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--green-dark); margin-bottom:6px; }
+    input, textarea, select {
+      width:100%; padding:13px 16px;
+      border:2px solid #e8ede8; border-radius:8px;
+      font-family:var(--font-body); font-size:0.9rem; color:var(--green-dark);
+      background:#fafafa; transition:var(--transition); outline:none;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color:var(--green-light); background:var(--white);
+      box-shadow:0 0 0 4px rgba(82,183,136,0.1);
+    }
+    textarea { min-height:130px; resize:vertical; }
+    .char-count { text-align:right; font-size:0.68rem; color:#bbb; margin-top:3px; }
+
+    .form-submit {
+      background:linear-gradient(135deg,var(--green-mid),var(--green-dark));
+      color:var(--white); width:100%; padding:15px;
+      border-radius:10px; font-size:0.92rem; font-weight:700;
+      letter-spacing:0.06em; text-transform:uppercase;
+      cursor:pointer; border:none; transition:var(--transition);
+      font-family:var(--font-body); display:flex; align-items:center; justify-content:center; gap:10px;
+    }
+    .form-submit:hover { opacity:0.9; transform:translateY(-2px); box-shadow:0 10px 25px rgba(26,58,26,0.25); }
+    .form-submit.loading { opacity:0.7; pointer-events:none; }
+
+    .form-success {
+      display:none; background:rgba(82,183,136,0.08);
+      border:2px solid var(--green-light); color:var(--green-dark);
+      padding:1.2rem 1.5rem; border-radius:10px; text-align:center;
+      font-weight:600; margin-top:1rem; font-size:0.92rem;
+    }
+    .form-success i { color:var(--green-mid); margin-right:8px; }
+
+    .privacy-note { font-size:0.72rem; color:#bbb; text-align:center; margin-top:1rem; }
+
+    /* ── MAP ── */
+    .map-section { background:var(--green-dark); padding:80px 2rem; }
+    .map-section .section-title { color:var(--white); }
+    .map-section .section-desc { color:rgba(255,255,255,0.55); }
+    .map-frame-wrap { max-width:1200px; margin:2.5rem auto 0; border-radius:var(--radius-lg); overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4); border:2px solid rgba(82,183,136,0.25); height:460px; }
+    .map-frame-wrap iframe { width:100%; height:100%; border:none; }
+
+    /* ── FAQ ── */
+    .faq-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; max-width:1100px; margin:0 auto; }
+    .faq-item { background:var(--white); border-radius:var(--radius); border:1px solid #eee; overflow:hidden; }
+    .faq-question {
+      padding:1.2rem 1.5rem; font-weight:700; color:var(--green-dark);
+      cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+      font-size:0.9rem; user-select:none; transition:var(--transition);
+    }
+    .faq-question:hover { background:#f9fcf9; }
+    .faq-question i { color:var(--green-mid); transition:transform 0.3s; font-size:0.8rem; flex-shrink:0; }
+    .faq-answer { padding:0 1.5rem; max-height:0; overflow:hidden; transition:max-height 0.4s ease, padding 0.3s ease; color:#666; font-size:0.87rem; line-height:1.75; }
+    .faq-item.open .faq-question { background:#f5faf5; color:var(--green-mid); }
+    .faq-item.open .faq-question i { transform:rotate(180deg); }
+    .faq-item.open .faq-answer { max-height:200px; padding:0 1.5rem 1.2rem; }
+
+    /* RESPONSIVE */
+    @media(max-width:1024px) { .contact-main { grid-template-columns:1fr; gap:2.5rem; } }
+    @media(max-width:768px) { .faq-grid { grid-template-columns:1fr; } .form-row { grid-template-columns:1fr; } .contact-form-panel { padding:2rem 1.5rem; } }
+  </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">🌿 NATIONAL PARKS</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">🌲</div>
+      <div class="logo-text">National Parks<span>Explore the Wild</span></div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="parks.html">Parks List</a></li>
+      <li><a href="animal-info.html">Animal Info</a></li>
+      <li><a href="sitemap.html">Site Map</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contact.html" class="active">Contact Us</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <div class="hero-badge" style="margin:0 auto 1rem"><i class="fas fa-envelope"></i> Get In Touch</div>
+    <h1>Contact Us</h1>
+    <p>We'd love to hear from you — questions, feedback, or just saying hello</p>
+    <div class="breadcrumb">
+      <a href="index.html">Home</a>
+      <i class="fas fa-chevron-right" style="font-size:0.6rem"></i>
+      <span>Contact Us</span>
+    </div>
+  </div>
+</div>
+
+<!-- INFO CARDS -->
+<section style="background:var(--cream); padding:80px 2rem 40px;">
+  <div class="section-header" style="margin-bottom:3rem;">
+    <div class="section-tag">Reach Us</div>
+    <h2 class="section-title">How to <em>Connect</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="info-cards">
+    <div class="info-card reveal">
+      <div class="info-card-icon"><i class="fas fa-map-marker-alt"></i></div>
+      <h4>Our Address</h4>
+      <p>Conservation House<br>Green Valley Road<br>Nature City, NC 10001<br>United States</p>
+    </div>
+    <div class="info-card reveal reveal-delay-1">
+      <div class="info-card-icon"><i class="fas fa-envelope"></i></div>
+      <h4>Email Us</h4>
+      <p>General Inquiries:<br><a href="mailto:info@nationalparks.com">info@nationalparks.com</a><br><br>Support:<br><a href="mailto:support@nationalparks.com">support@nationalparks.com</a></p>
+    </div>
+    <div class="info-card reveal reveal-delay-2">
+      <div class="info-card-icon"><i class="fas fa-phone-alt"></i></div>
+      <h4>Call Us</h4>
+      <p>Toll Free:<br><strong>+1 (800) 123-PARK</strong><br><br>International:<br><strong>+1 (212) 555-0192</strong></p>
+    </div>
+    <div class="info-card reveal reveal-delay-3">
+      <div class="info-card-icon"><i class="fas fa-clock"></i></div>
+      <h4>Office Hours</h4>
+      <p>Mon – Fri: 9:00 AM – 6:00 PM<br>Saturday: 10:00 AM – 4:00 PM<br>Sunday: Closed<br><br><em style="color:var(--green-mid)">All times EST</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CONTACT: details + form -->
+<section style="background:var(--cream); padding:20px 2rem 100px;">
+  <div class="contact-main">
+
+    <!-- LEFT: details -->
+    <div class="contact-left reveal">
+      <h2>Let's Start a <em style="color:var(--green-mid)">Conversation</em></h2>
+      <p>Whether you're planning your first park visit, researching wildlife, or have feedback about our portal — our team is happy to help. Fill out the form or reach us directly through any of the channels below.</p>
+
+      <div class="contact-detail">
+        <div class="cd-icon"><i class="fas fa-map-marker-alt"></i></div>
+        <div>
+          <div class="cd-label">Headquarters</div>
+          <div class="cd-value">Conservation House, Green Valley Road<br>Nature City, NC 10001, USA</div>
+        </div>
+      </div>
+
+      <div class="contact-detail">
+        <div class="cd-icon"><i class="fas fa-envelope-open-text"></i></div>
+        <div>
+          <div class="cd-label">Email Address</div>
+          <div class="cd-value">
+            <a href="mailto:info@nationalparks.com">info@nationalparks.com</a><br>
+            <a href="mailto:support@nationalparks.com">support@nationalparks.com</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-detail">
+        <div class="cd-icon"><i class="fas fa-phone-alt"></i></div>
+        <div>
+          <div class="cd-label">Phone Numbers</div>
+          <div class="cd-value">Toll Free: +1 (800) 123-PARK<br>Int'l: +1 (212) 555-0192</div>
+        </div>
+      </div>
+
+      <div class="contact-detail">
+        <div class="cd-icon"><i class="fas fa-fax"></i></div>
+        <div>
+          <div class="cd-label">Fax</div>
+          <div class="cd-value">+1 (212) 555-0199</div>
+        </div>
+      </div>
+
+      <div class="contact-detail">
+        <div class="cd-icon"><i class="fas fa-globe"></i></div>
+        <div>
+          <div class="cd-label">Website</div>
+          <div class="cd-value"><a href="index.html">www.nationalparks.com</a></div>
+        </div>
+      </div>
+
+      <!-- Office hours mini-table -->
+      <h4 style="font-family:var(--font-heading);color:var(--green-dark);margin-top:2rem;margin-bottom:0.5rem;">Office Hours</h4>
+      <table class="hours-table">
+        <tr><td>Monday – Friday</td><td>9:00 AM – 6:00 PM</td><td><span class="open-badge">OPEN</span></td></tr>
+        <tr><td>Saturday</td><td>10:00 AM – 4:00 PM</td><td><span class="open-badge">OPEN</span></td></tr>
+        <tr><td>Sunday</td><td>—</td><td><span class="closed-badge">CLOSED</span></td></tr>
+        <tr><td>Public Holidays</td><td>—</td><td><span class="closed-badge">CLOSED</span></td></tr>
+      </table>
+
+      <!-- Social -->
+      <h4 style="font-family:var(--font-heading);color:var(--green-dark);margin-top:2rem;margin-bottom:0.8rem;">Follow Us</h4>
+      <div class="contact-socials">
+        <a href="#" class="cs-link" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="cs-link" title="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="cs-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="cs-link" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="cs-link" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="cs-link" title="Pinterest"><i class="fab fa-pinterest-p"></i></a>
+      </div>
+    </div>
+
+    <!-- RIGHT: form -->
+    <div class="contact-form-panel reveal reveal-delay-2">
+      <div class="cf-header">
+        <h3>Send Us a Message</h3>
+        <p>We typically respond within 24 hours on business days.</p>
+      </div>
+
+      <form id="contactForm" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">First Name *</label>
+            <input type="text" id="firstName" name="firstName" placeholder="John" required />
+          </div>
+          <div class="form-group">
+            <label for="lastName">Last Name *</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Doe" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" name="email" placeholder="john@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="topic">Topic *</label>
+          <select id="topic" name="topic" required>
+            <option value="" disabled selected>Choose a topic…</option>
+            <option value="park-info">🏕️ Park Information</option>
+            <option value="wildlife">🦁 Wildlife Inquiry</option>
+            <option value="visit">📅 Visit Planning</option>
+            <option value="conservation">🌿 Conservation</option>
+            <option value="feedback">💬 Website Feedback</option>
+            <option value="media">📸 Media & Press</option>
+            <option value="partnership">🤝 Partnership</option>
+            <option value="other">❓ Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="park">Related Park (optional)</label>
+          <select id="park" name="park">
+            <option value="">— Select a park —</option>
+            <option>Yellowstone National Park (USA)</option>
+            <option>Grand Canyon National Park (USA)</option>
+            <option>Banff National Park (Canada)</option>
+            <option>Serengeti National Park (Tanzania)</option>
+            <option>Kruger National Park (South Africa)</option>
+            <option>Lake Nakuru National Park (Kenya)</option>
+            <option>Jim Corbett National Park (India)</option>
+            <option>Amazon National Park (Brazil)</option>
+            <option>Zhangjiajie National Park (China)</option>
+            <option>Swiss National Park (Switzerland)</option>
+            <option>Plitvice Lakes National Park (Croatia)</option>
+            <option>Great Barrier Reef Marine Park (Australia)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Your Message *</label>
+          <textarea id="message" name="message" placeholder="Tell us how we can help you…" maxlength="1000" required></textarea>
+          <div class="char-count"><span id="charCount">0</span> / 1000 characters</div>
+        </div>
+
+        <div class="form-group" style="display:flex;gap:10px;align-items:flex-start;">
+          <input type="checkbox" id="newsletter" name="newsletter" style="width:auto;margin-top:3px;flex-shrink:0;" />
+          <label for="newsletter" style="text-transform:none;letter-spacing:0;font-size:0.82rem;font-weight:400;color:#666;cursor:pointer;">Subscribe to our newsletter for park updates and wildlife news.</label>
+        </div>
+
+        <button type="submit" class="form-submit" id="submitBtn">
+          <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+
+        <div class="form-success" id="formSuccess">
+          <i class="fas fa-check-circle"></i>
+          Thank you! Your message has been sent successfully. We'll get back to you within 24 hours.
+        </div>
+
+        <p class="privacy-note">🔒 Your information is kept private and never shared with third parties.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- GOOGLE MAP -->
+<section class="map-section">
+  <div class="section-header">
+    <div class="section-tag" style="background:rgba(82,183,136,0.2);color:var(--green-light);border-color:rgba(82,183,136,0.3)">Location</div>
+    <h2 class="section-title">Find Us on the <em style="color:var(--green-light)">Map</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc">Our headquarters is located in Nature City — visit us in person or reach us digitally from anywhere.</p>
+  </div>
+  <div class="map-frame-wrap reveal">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.2412648718453!2d-73.98784368459418!3d40.74844097932844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2s!4v1616517523753!5m2!1sen!2s"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="National Parks Portal Office Location">
+    </iframe>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background:var(--cream); padding:100px 2rem;">
+  <div class="section-header">
+    <div class="section-tag">FAQ</div>
+    <h2 class="section-title">Frequently Asked <em>Questions</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc">Quick answers to the most common questions we receive.</p>
+  </div>
+  <div class="faq-grid">
+
+    <div class="faq-item reveal">
+      <div class="faq-question">Is the National Parks Portal free to use? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-answer">Yes! The National Parks Portal is completely free. Our mission is to make park and wildlife information accessible to everyone around the world, so there is no registration or fee required to browse any section of the site.</div>
+    </div>
+
+    <div class="faq-item reveal reveal-delay-1">
+      <div class="faq-question">How do I find a park near my location? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-answer">Visit the Parks List page and use the continent filter to narrow down parks by region. Each park card includes its exact location, and our interactive Google Map section shows all featured parks plotted on a global map.</div>
+    </div>
+
+    <div class="faq-item reveal reveal-delay-2">
+      <div class="faq-question">Can I submit photos to the gallery? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-answer">Absolutely! We love featuring community photography. Send your high-resolution park and wildlife photos to info@nationalparks.com with the subject line "Gallery Submission." Include the park name, location, and a brief description. Our team reviews all submissions.</div>
+    </div>
+
+    <div class="faq-item reveal reveal-delay-3">
+      <div class="faq-question">How often is the park information updated? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-answer">Our team reviews and updates park data, entry fees, and facilities information quarterly. Wildlife and conservation status information is updated as new scientific data becomes available, typically twice a year.</div>
+    </div>
+
+    <div class="faq-item reveal">
+      <div class="faq-question">Do you offer guided safari or tour bookings? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-answer">We are an information portal, not a tour operator. However, each park's detail page includes links to official park websites where you can find accredited tour operators, booking information, and permit requirements for your visit.</div>
+    </div>
+
+    <div class="faq-item reveal reveal-delay-1">
+      <div class="faq-question">How can I support wildlife conservation? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-answer">There are many ways to help! Visiting national parks directly supports their funding. You can also donate to organisations like WWF, Wildlife Conservation Society, or local park foundations. Responsible eco-tourism and reducing your environmental footprint also make a significant impact.</div>
+    </div>
+
+    <div class="faq-item reveal reveal-delay-2">
+      <div class="faq-question">Is the animal information scientifically accurate? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-answer">We source our wildlife data from reputable institutions including the IUCN Red List, WWF, National Geographic, and peer-reviewed wildlife research. Our team includes qualified wildlife biologists who review all animal information for accuracy.</div>
+    </div>
+
+    <div class="faq-item reveal reveal-delay-3">
+      <div class="faq-question">How do I report incorrect information on the site? <i class="fas fa-chevron-down"></i></div>
+      <div class="faq-answer">We appreciate corrections! Please use the contact form on this page, select "Website Feedback" as your topic, and describe the issue including the specific page and section. Our content team will review and update the information promptly.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="margin-bottom:1rem">
+        <div class="logo-icon">🌲</div>
+        <div class="logo-text">National Parks<span>Explore the Wild</span></div>
+      </div>
+      <p>Your digital gateway to the world's most magnificent natural treasures. Explore, learn, and be inspired to protect our planet's wild places.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="parks.html">Parks List</a></li>
+        <li><a href="animal-info.html">Animal Info</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact Info</h4>
+      <ul>
+        <li><a href="mailto:info@nationalparks.com">📧 info@nationalparks.com</a></li>
+        <li><a href="tel:+18001237275">📞 +1 (800) 123-PARK</a></li>
+        <li><a href="#">📍 Nature City, NC 10001</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="sitemap.html">Site Map</a></li>
+        <li><a href="gallery.html">Photo Gallery</a></li>
+        <li><a href="animal-info.html">Wildlife Info</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 National Parks Portal. Made with 🌿 for nature lovers worldwide.</p>
+  </div>
+</footer>
+
+<!-- BACK TO TOP -->
+<button id="back-top" title="Back to Top"><i class="fas fa-arrow-up"></i></button>
+
+<script src="script.js"></script>
+<script>
+  // ── Character counter ──
+  const msgArea = document.getElementById('message');
+  const counter = document.getElementById('charCount');
+  msgArea?.addEventListener('input', () => { counter.textContent = msgArea.value.length; });
+
+  // ── Contact form submit ──
+  document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.classList.add('loading');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending…';
+
+    setTimeout(() => {
+      btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+      btn.style.background = 'linear-gradient(135deg, var(--green-light), var(--green-mid))';
+      document.getElementById('formSuccess').style.display = 'block';
+      this.reset();
+      counter.textContent = '0';
+
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+        btn.style.background = '';
+        btn.classList.remove('loading');
+        document.getElementById('formSuccess').style.display = 'none';
+      }, 5000);
+    }, 1800);
+  });
+
+  // ── FAQ accordion ──
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const isOpen = item.classList.contains('open');
+      // close all
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      // toggle clicked
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+</script>
+</body>
+</html>

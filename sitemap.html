@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Site Map — National Parks Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .page-hero { height:45vh; min-height:300px; background:url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1600&q=80') center/cover; position:relative; display:flex; align-items:center; justify-content:center; text-align:center; }
+    .page-hero::before { content:''; position:absolute; inset:0; background:rgba(10,30,10,0.65); }
+    .page-hero-content { position:relative; z-index:1; color:var(--white); }
+    .page-hero-content h1 { font-family:var(--font-display); font-size:clamp(2.2rem,5vw,3.8rem); letter-spacing:0.08em; }
+    .breadcrumb { display:flex; justify-content:center; gap:8px; align-items:center; color:rgba(255,255,255,0.5); font-size:0.82rem; margin-top:1rem; }
+    .breadcrumb a { color:var(--green-light); }
+
+    /* Tree diagram */
+    .sitemap-wrapper { max-width:1200px; margin:0 auto; }
+    .sm-root { text-align:center; margin-bottom:3rem; }
+    .sm-root-node { display:inline-flex; align-items:center; gap:10px; background:var(--green-dark); color:var(--white); font-family:var(--font-display); font-size:1.1rem; padding:18px 36px; border-radius:12px; letter-spacing:0.1em; box-shadow:0 8px 30px rgba(26,58,26,0.3); }
+    .sm-connector-down { width:2px; height:40px; background:var(--green-light); margin:0 auto; }
+    .sm-connector-h { width:80%; height:2px; background:var(--green-light); margin:0 auto; border-radius:1px; }
+    .sm-pages-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:1.5rem; }
+    .sm-page-col { display:flex; flex-direction:column; align-items:center; }
+    .sm-page-node { background:var(--green-mid); color:var(--white); border-radius:10px; padding:12px 16px; text-align:center; font-weight:700; font-size:0.85rem; width:100%; transition:var(--transition); cursor:pointer; text-decoration:none; display:block; }
+    .sm-page-node:hover { background:var(--green-dark); transform:translateY(-3px); box-shadow:0 6px 20px rgba(26,58,26,0.2); color:var(--white); }
+    .sm-page-node i { display:block; font-size:1.4rem; margin-bottom:6px; }
+    .sm-sub-connector { width:2px; height:24px; background:var(--green-pale); margin:0 auto; }
+    .sm-sub-items { width:100%; background:var(--white); border-radius:8px; border:1px solid var(--green-pale); overflow:hidden; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
+    .sm-sub-item { display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid #f0f5f0; font-size:0.78rem; color:#555; transition:var(--transition); }
+    .sm-sub-item:last-child { border-bottom:none; }
+    .sm-sub-item:hover { background:#f5faf5; color:var(--green-dark); }
+    .sm-sub-item i { color:var(--green-light); font-size:0.7rem; }
+
+    /* Parks location table */
+    .loc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.5rem; max-width:1200px; margin:0 auto; }
+    .loc-card { background:var(--white); border-radius:var(--radius); padding:1.5rem; box-shadow:0 3px 15px rgba(0,0,0,0.06); border-left:4px solid var(--green-light); transition:var(--transition); }
+    .loc-card:hover { transform:translateX(4px); }
+    .loc-card-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.8rem; }
+    .loc-num { font-family:var(--font-display); font-size:2rem; color:var(--green-pale); line-height:1; }
+    .loc-flag { font-size:1.5rem; }
+    .loc-name { font-family:var(--font-heading); color:var(--green-dark); font-size:1.05rem; margin-bottom:4px; }
+    .loc-country { color:var(--green-mid); font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; }
+    .loc-coords { font-size:0.72rem; color:#aaa; font-family:monospace; }
+    .loc-link { display:inline-flex; align-items:center; gap:6px; background:rgba(82,183,136,0.1); color:var(--green-mid); font-size:0.72rem; font-weight:700; padding:4px 12px; border-radius:20px; margin-top:8px; border:1px solid var(--green-pale); transition:var(--transition); }
+    .loc-link:hover { background:var(--green-mid); color:var(--white); }
+  </style>
+</head>
+<body>
+
+<div id="loader"><div class="loader-logo">🌿 NATIONAL PARKS</div><div class="loader-bar"><div class="loader-bar-fill"></div></div></div>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="logo-icon">🌲</div><div class="logo-text">National Parks<span>Explore the Wild</span></div></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="parks.html">Parks List</a></li>
+      <li><a href="animal-info.html">Animal Info</a></li>
+      <li><a href="sitemap.html" class="active">Site Map</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <div class="hero-badge" style="margin:0 auto 1rem"><i class="fas fa-sitemap"></i> Navigation</div>
+    <h1>Site Map</h1>
+    <p>Complete overview of the National Parks Portal structure</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> <i class="fas fa-chevron-right" style="font-size:0.6rem"></i> <span>Site Map</span></div>
+  </div>
+</div>
+
+<!-- SITE STRUCTURE -->
+<section style="background:var(--cream); padding:80px 2rem;">
+  <div class="section-header">
+    <div class="section-tag">Navigation Structure</div>
+    <h2 class="section-title">Website <em>Structure</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc">A complete visual map of all pages and sections on this portal.</p>
+  </div>
+  <div class="sitemap-wrapper">
+    <div class="sm-root reveal">
+      <div class="sm-root-node">🌲 National Parks Portal</div>
+    </div>
+    <div class="sm-connector-down reveal"></div>
+    <div class="sm-connector-h reveal"></div>
+    <div style="height:24px"></div>
+
+    <div class="sm-pages-row reveal">
+
+      <div class="sm-page-col">
+        <a href="index.html" class="sm-page-node"><i class="fas fa-home"></i>Home</a>
+        <div class="sm-sub-connector"></div>
+        <div class="sm-sub-items">
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Hero Slider</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Stats Bar</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> About Intro</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Featured Parks</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Wildlife</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Map Section</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Gallery Preview</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Contact Form</div>
+        </div>
+      </div>
+
+      <div class="sm-page-col">
+        <a href="about.html" class="sm-page-node"><i class="fas fa-info-circle"></i>About</a>
+        <div class="sm-sub-connector"></div>
+        <div class="sm-sub-items">
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Our Mission</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Core Values</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Timeline</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Team Members</div>
+        </div>
+      </div>
+
+      <div class="sm-page-col">
+        <a href="parks.html" class="sm-page-node"><i class="fas fa-map-marked-alt"></i>Parks List</a>
+        <div class="sm-sub-connector"></div>
+        <div class="sm-sub-items">
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Search & Filter</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Grid / List View</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Park Cards</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Detail Modal</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Parks Table</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> 12 World Parks</div>
+        </div>
+      </div>
+
+      <div class="sm-page-col">
+        <a href="animal-info.html" class="sm-page-node"><i class="fas fa-paw"></i>Animal Info</a>
+        <div class="sm-sub-connector"></div>
+        <div class="sm-sub-items">
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Mammals</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Birds</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Reptiles</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Marine Life</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Rare Species</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Category Filter</div>
+        </div>
+      </div>
+
+      <div class="sm-page-col">
+        <a href="sitemap.html" class="sm-page-node"><i class="fas fa-sitemap"></i>Site Map</a>
+        <div class="sm-sub-connector"></div>
+        <div class="sm-sub-items">
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Site Structure</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Park Locations</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Quick Links</div>
+        </div>
+      </div>
+
+      <div class="sm-page-col">
+        <a href="gallery.html" class="sm-page-node"><i class="fas fa-images"></i>Gallery</a>
+        <div class="sm-sub-connector"></div>
+        <div class="sm-sub-items">
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Masonry Grid</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Category Filter</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Lightbox View</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Parks Photos</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Animal Photos</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Bird Photos</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Nature Photos</div>
+        </div>
+      </div>
+
+      <div class="sm-page-col">
+        <a href="contact.html" class="sm-page-node"><i class="fas fa-envelope"></i>Contact</a>
+        <div class="sm-sub-connector"></div>
+        <div class="sm-sub-items">
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Contact Form</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Address</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Email & Phone</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Google Map</div>
+          <div class="sm-sub-item"><i class="fas fa-circle"></i> Office Hours</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PARKS LOCATIONS -->
+<section style="background:var(--white); padding:100px 2rem;">
+  <div class="section-header">
+    <div class="section-tag">All Parks</div>
+    <h2 class="section-title">Park <em>Locations</em> Directory</h2>
+    <div class="section-line"></div>
+    <p class="section-desc">Quick reference to all national parks featured on this portal.</p>
+  </div>
+  <div class="loc-grid">
+    <div class="loc-card reveal"><div class="loc-card-header"><div class="loc-num">01</div><div class="loc-flag">🇺🇸</div></div><div class="loc-name">Yellowstone NP</div><div class="loc-country">Wyoming, USA</div><div class="loc-coords">44.4280° N, 110.5885° W</div><a href="parks.html" class="loc-link"><i class="fas fa-external-link-alt"></i> View Details</a></div>
+    <div class="loc-card reveal reveal-delay-1"><div class="loc-card-header"><div class="loc-num">02</div><div class="loc-flag">🇺🇸</div></div><div class="loc-name">Grand Canyon NP</div><div class="loc-country">Arizona, USA</div><div class="loc-coords">36.1069° N, 112.1129° W</div><a href="parks.html" class="loc-link"><i class="fas fa-external-link-alt"></i> View Details</a></div>
+    <div class="loc-card reveal reveal-delay-2"><div class="loc-card-header"><div class="loc-num">03</div><div class="loc-flag">🇨🇦</div></div><div class="loc-name">Banff NP</div><div class="loc-country">Alberta, Canada</div><div class="loc-coords">51.4968° N, 115.9281° W</div><a href="parks.html" class="loc-link"><i class="fas fa-external-link-alt"></i> View Details</a></div>
+    <div class="loc-card reveal"><div class="loc-card-header"><div class="loc-num">04</div><div class="loc-flag">🇹🇿</div></div><div class="loc-name">Serengeti NP</div><div class="loc-country">Tanzania, Africa</div><div class="loc-coords">2.1540° S, 34.6857° E</div><a href="parks.html" class="loc-link"><i class="fas fa-external-link-alt"></i> View Details</a></div>
+    <div class="loc-card reveal reveal-delay-1"><div class="loc-card-header"><div class="loc-num">05</div><div class="loc-flag">🇿🇦</div></div><div class="loc-name">Kruger NP</div><div class="loc-country">Limpopo, South Africa</div><div class="loc-coords">23.9884° S, 31.5547° E</div><a href="parks.html" class="loc-link"><i class="fas fa-external-link-alt"></i> View Details</a></div>
+    <div class="loc-card reveal reveal-delay-2"><div class="loc-card-header"><div class="loc-num">06</div><div class="loc-flag">🇰🇪</div></div><div class="loc-name">Lake Nakuru NP</div><div class="loc-country">Rift Valley, Kenya</div><div class="loc-coords">0.3556° S, 36.0831° E</div><a href="parks.html" class="loc-link"><i class="fas fa-external-link-alt"></i> View Details</a></div>
+    <div class="loc-card reveal"><div class="loc-card-header"><div class="loc-num">07</div><div class="loc-flag">🇮🇳</div></div><div class="loc-name">Jim Corbett NP</div><div class="loc-country">Uttarakhand, India</div><div class="loc-coords">29.5300° N, 78.7747° E</div><a href="parks.html" class="loc-link"><i class="fas fa-external-link-alt"></i> View Details</a></div>
+    <div class="loc-card reveal reveal-delay-1"><div class="loc-card-header"><div class="loc-num">08</div><div class="loc-flag">🇧🇷</div></div><div class="loc-name">Amazon NP</div><div class="loc-country">Amazonas, Brazil</div><div class="loc-coords">3.0000° S, 60.0000° W</div><a href="parks.html" class="loc-link"><i class="fas fa-external-link-alt"></i> View Details</a></div>
+    <div class="loc-card reveal reveal-delay-2"><div class="loc-card-header"><div class="loc-num">09</div><div class="loc-flag">🇨🇳</div></div><div class="loc-name">Zhangjiajie NP</div><div class="loc-country">Hunan, China</div><div class="loc-coords">29.3250° N, 110.4340° E</div><a href="parks.html" class="loc-link"><i class="fas fa-external-link-alt"></i> View Details</a></div>
+    <div class="loc-card reveal"><div class="loc-card-header"><div class="loc-num">10</div><div class="loc-flag">🇨🇭</div></div><div class="loc-name">Swiss National Park</div><div class="loc-country">Graubünden, Switzerland</div><div class="loc-coords">46.6566° N, 10.1899° E</div><a href="parks.html" class="loc-link"><i class="fas fa-external-link-alt"></i> View Details</a></div>
+    <div class="loc-card reveal reveal-delay-1"><div class="loc-card-header"><div class="loc-num">11</div><div class="loc-flag">🇭🇷</div></div><div class="loc-name">Plitvice Lakes NP</div><div class="loc-country">Lika, Croatia</div><div class="loc-coords">44.8654° N, 15.5820° E</div><a href="parks.html" class="loc-link"><i class="fas fa-external-link-alt"></i> View Details</a></div>
+    <div class="loc-card reveal reveal-delay-2"><div class="loc-card-header"><div class="loc-num">12</div><div class="loc-flag">🇦🇺</div></div><div class="loc-name">Great Barrier Reef</div><div class="loc-country">Queensland, Australia</div><div class="loc-coords">18.2871° S, 147.6992° E</div><a href="parks.html" class="loc-link"><i class="fas fa-external-link-alt"></i> View Details</a></div>
+  </div>
+</section>
+
+<!-- QUICK LINKS -->
+<section style="background:var(--green-dark); padding:80px 2rem;">
+  <div class="section-header">
+    <div class="section-tag" style="background:rgba(82,183,136,0.2);color:var(--green-light);border-color:rgba(82,183,136,0.3)">Quick Access</div>
+    <h2 class="section-title" style="color:var(--white)">Quick <em style="color:var(--green-light)">Links</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;max-width:1000px;margin:0 auto;">
+    <a href="index.html" class="map-park-item reveal" style="text-decoration:none"><div class="map-pin">🏠</div><div><div class="map-park-name">Home Page</div><div class="map-park-loc">Main entrance</div></div></a>
+    <a href="parks.html" class="map-park-item reveal reveal-delay-1" style="text-decoration:none"><div class="map-pin">🗺️</div><div><div class="map-park-name">Parks List</div><div class="map-park-loc">All 12 parks</div></div></a>
+    <a href="animal-info.html" class="map-park-item reveal reveal-delay-2" style="text-decoration:none"><div class="map-pin">🦁</div><div><div class="map-park-name">Animal Info</div><div class="map-park-loc">Wildlife encyclopedia</div></div></a>
+    <a href="gallery.html" class="map-park-item reveal reveal-delay-3" style="text-decoration:none"><div class="map-pin">📸</div><div><div class="map-park-name">Gallery</div><div class="map-park-loc">Photo collection</div></div></a>
+    <a href="about.html" class="map-park-item reveal" style="text-decoration:none"><div class="map-pin">ℹ️</div><div><div class="map-park-name">About Us</div><div class="map-park-loc">Our mission & team</div></div></a>
+    <a href="contact.html" class="map-park-item reveal reveal-delay-1" style="text-decoration:none"><div class="map-pin">✉️</div><div><div class="map-park-name">Contact Us</div><div class="map-park-loc">Get in touch</div></div></a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><div class="nav-logo" style="margin-bottom:1rem"><div class="logo-icon">🌲</div><div class="logo-text">National Parks<span>Explore the Wild</span></div></div><p>Your digital gateway to the world's most magnificent natural treasures.</p></div>
+    <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="parks.html">Parks List</a></li><li><a href="animal-info.html">Animal Info</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Top Parks</h4><ul><li><a href="parks.html">Yellowstone</a></li><li><a href="parks.html">Serengeti</a></li><li><a href="parks.html">Amazon</a></li><li><a href="parks.html">Jim Corbett</a></li><li><a href="parks.html">Banff</a></li></ul></div>
+    <div class="footer-col"><h4>Resources</h4><ul><li><a href="sitemap.html">Site Map</a></li><li><a href="contact.html">Contact Us</a></li><li><a href="gallery.html">Gallery</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 National Parks Portal. Made with 🌿 for nature lovers worldwide.</p></div>
+</footer>
+
+<button id="back-top"><i class="fas fa-arrow-up"></i></button>
+<script src="script.js"></script>
+</body>
+</html>

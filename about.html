@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — National Parks Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .page-hero { height: 55vh; min-height: 380px; background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&q=80') center/cover; position: relative; display: flex; align-items: center; justify-content: center; text-align: center; }
+    .page-hero::before { content:''; position:absolute; inset:0; background: rgba(10,30,10,0.6); }
+    .page-hero-content { position:relative; z-index:1; color:var(--white); }
+    .page-hero-content h1 { font-family:var(--font-display); font-size: clamp(2.5rem,5vw,4rem); letter-spacing:0.08em; }
+    .page-hero-content p { color:rgba(255,255,255,0.7); font-size:1.1rem; margin-top:0.8rem; }
+    .breadcrumb { display:flex; justify-content:center; gap:8px; align-items:center; color:rgba(255,255,255,0.5); font-size:0.82rem; margin-top:1rem; }
+    .breadcrumb a { color:var(--green-light); }
+
+    /* Timeline */
+    .timeline { max-width:800px; margin:0 auto; position:relative; }
+    .timeline::before { content:''; position:absolute; left:50%; top:0; bottom:0; width:2px; background: linear-gradient(to bottom, var(--green-light), var(--green-pale)); transform:translateX(-50%); }
+    .timeline-item { display:grid; grid-template-columns:1fr 1fr; gap:3rem; margin-bottom:3rem; }
+    .timeline-item:nth-child(even) .tl-content { grid-column:2; }
+    .timeline-item:nth-child(even) .tl-spacer { grid-column:1; grid-row:1; }
+    .tl-content { background:var(--white); border-radius:var(--radius); padding:1.5rem; box-shadow:0 4px 20px rgba(0,0,0,0.07); position:relative; border-left:4px solid var(--green-light); }
+    .tl-content::after { content:''; position:absolute; top:50%; width:14px; height:14px; background:var(--green-light); border-radius:50%; border:3px solid var(--white); box-shadow:0 0 0 2px var(--green-light); }
+    .timeline-item:nth-child(odd) .tl-content::after { right:-40px; transform:translateY(-50%); }
+    .timeline-item:nth-child(even) .tl-content::after { left:-40px; transform:translateY(-50%); }
+    .tl-year { font-family:var(--font-display); color:var(--green-light); font-size:1.3rem; }
+    .tl-title { font-family:var(--font-heading); color:var(--green-dark); font-size:1.1rem; margin:4px 0 8px; }
+    .tl-desc { color:#666; font-size:0.85rem; line-height:1.6; }
+
+    /* Team */
+    .team-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:2rem; max-width:1100px; margin:0 auto; }
+    .team-card { background:var(--white); border-radius:var(--radius-lg); overflow:hidden; text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.07); transition:var(--transition); }
+    .team-card:hover { transform:translateY(-6px); box-shadow:0 12px 35px rgba(26,58,26,0.12); }
+    .team-img { width:100%; height:220px; object-fit:cover; }
+    .team-info { padding:1.5rem; }
+    .team-name { font-family:var(--font-heading); color:var(--green-dark); font-size:1.1rem; }
+    .team-role { color:var(--green-mid); font-size:0.78rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin:4px 0 10px; }
+    .team-bio { color:#888; font-size:0.82rem; line-height:1.6; }
+
+    /* Values */
+    .values-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:2rem; max-width:1200px; margin:0 auto; }
+    .value-card { padding:2rem; border-radius:var(--radius); background:var(--white); border-top:4px solid var(--green-light); box-shadow:0 4px 15px rgba(0,0,0,0.06); transition:var(--transition); }
+    .value-card:hover { transform:translateY(-4px); }
+    .value-icon { font-size:2.5rem; margin-bottom:1rem; }
+    .value-title { font-family:var(--font-heading); color:var(--green-dark); font-size:1.2rem; margin-bottom:0.8rem; }
+    .value-desc { color:#666; font-size:0.88rem; line-height:1.7; }
+
+    @media(max-width:768px) {
+      .timeline::before { left:20px; }
+      .timeline-item { grid-template-columns:1fr; gap:0; padding-left:50px; }
+      .timeline-item:nth-child(even) .tl-content { grid-column:1; }
+      .tl-content::after { left:-36px !important; right:auto !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="loader"><div class="loader-logo">🌿 NATIONAL PARKS</div><div class="loader-bar"><div class="loader-bar-fill"></div></div></div>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="logo-icon">🌲</div><div class="logo-text">National Parks<span>Explore the Wild</span></div></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="parks.html">Parks List</a></li>
+      <li><a href="animal-info.html">Animal Info</a></li>
+      <li><a href="sitemap.html">Site Map</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-content">
+    <div class="hero-badge" style="margin:0 auto 1rem"><i class="fas fa-leaf"></i> Our Story</div>
+    <h1>About National Parks</h1>
+    <p>Dedicated to conservation, education & exploration</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> <i class="fas fa-chevron-right" style="font-size:0.6rem"></i> <span>About</span></div>
+  </div>
+</div>
+
+<!-- MISSION -->
+<section id="about" style="background:var(--white)">
+  <div class="about-grid">
+    <div class="about-img-stack reveal">
+      <img class="about-img-main" src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=800&q=80" alt="Waterfall" />
+      <img class="about-img-accent" src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&q=80" alt="Explorer" />
+      <div class="about-badge-float"><div class="about-badge-num">1872</div><div class="about-badge-txt">Since Yellowstone</div></div>
+    </div>
+    <div class="about-text reveal reveal-delay-2">
+      <div class="section-tag">Who We Are</div>
+      <h2>Guardians of <em style="color:var(--green-mid)">Nature's Legacy</em></h2>
+      <p>The National Parks Portal was created to bridge the gap between modern technology and the ancient wonders of our natural world. We believe that digital access to park information inspires real-world conservation.</p>
+      <p>Our platform replaced outdated manual record systems — paper files that were vulnerable to damage, loss, and inefficiency. Today, all park data is stored securely, searchable instantly, and accessible from anywhere on the globe.</p>
+      <p>From the geysers of Yellowstone to the jungles of the Amazon, we bring every corner of the wild world to your fingertips — so you can plan your visit, learn about wildlife, and join the conservation movement.</p>
+      <a href="parks.html" class="btn btn-primary" style="margin-top:1.5rem"><i class="fas fa-map-marked-alt"></i> Explore Parks</a>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section style="background:#f5f8f5; padding:100px 2rem;">
+  <div class="section-header">
+    <div class="section-tag">What We Stand For</div>
+    <h2 class="section-title">Our Core <em>Values</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="values-grid">
+    <div class="value-card reveal"><div class="value-icon">🌿</div><div class="value-title">Conservation First</div><div class="value-desc">Every page, every photo, every data point serves one master purpose: protecting the wild places that sustain life on Earth.</div></div>
+    <div class="value-card reveal reveal-delay-1"><div class="value-icon">📚</div><div class="value-title">Education</div><div class="value-desc">Knowledge is the greatest conservation tool. We make park and wildlife information freely available to curious minds everywhere.</div></div>
+    <div class="value-card reveal reveal-delay-2"><div class="value-icon">🌍</div><div class="value-title">Global Reach</div><div class="value-desc">Nature has no borders. We cover parks from every continent, celebrating the diversity of Earth's wild ecosystems.</div></div>
+    <div class="value-card reveal reveal-delay-3"><div class="value-icon">🤝</div><div class="value-title">Community</div><div class="value-desc">We support rangers, researchers, indigenous communities, and visitors who together form the backbone of park stewardship.</div></div>
+    <div class="value-card reveal"><div class="value-icon">💡</div><div class="value-title">Innovation</div><div class="value-desc">Using the latest web technologies — maps, geolocation, digital archives — to make park access easier than ever before.</div></div>
+    <div class="value-card reveal reveal-delay-1"><div class="value-icon">♻️</div><div class="value-title">Sustainability</div><div class="value-desc">We advocate for low-impact tourism and sustainable practices that leave parks pristine for future generations.</div></div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section style="background:var(--cream); padding:100px 2rem;">
+  <div class="section-header">
+    <div class="section-tag">History</div>
+    <h2 class="section-title">Timeline of <em>Conservation</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc">Key milestones in the global national parks movement.</p>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item reveal">
+      <div class="tl-content"><div class="tl-year">1872</div><div class="tl-title">Yellowstone — World's First</div><div class="tl-desc">The United States established Yellowstone as the first national park in the world, setting a global precedent for conservation.</div></div>
+      <div class="tl-spacer"></div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="tl-spacer"></div>
+      <div class="tl-content"><div class="tl-year">1916</div><div class="tl-title">US National Park Service Founded</div><div class="tl-desc">The NPS was established to manage and protect a growing system of parks, monuments, and other natural areas across America.</div></div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="tl-content"><div class="tl-year">1948</div><div class="tl-title">Serengeti Protected</div><div class="tl-desc">Tanzania's Serengeti became a protected area, safeguarding the world's greatest wildlife migration for future generations.</div></div>
+      <div class="tl-spacer"></div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="tl-spacer"></div>
+      <div class="tl-content"><div class="tl-year">1972</div><div class="tl-title">World Heritage Convention</div><div class="tl-desc">UNESCO's World Heritage Convention created a framework to identify and protect natural and cultural sites of outstanding universal value.</div></div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="tl-content"><div class="tl-year">2000</div><div class="tl-title">Digital Era Begins</div><div class="tl-desc">National park systems worldwide began digitizing records, enabling online access to park information for the first time.</div></div>
+      <div class="tl-spacer"></div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="tl-spacer"></div>
+      <div class="tl-content"><div class="tl-year">2024</div><div class="tl-title">National Parks Portal Launched</div><div class="tl-desc">This portal was created to provide comprehensive, searchable, and map-enabled digital access to world national park information.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section style="background:var(--white); padding:100px 2rem;">
+  <div class="section-header">
+    <div class="section-tag">The People</div>
+    <h2 class="section-title">Meet Our <em>Team</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc">Passionate conservationists and technology experts working together.</p>
+  </div>
+  <div class="team-grid">
+    <div class="team-card reveal">
+      <img class="team-img" src="Screenshot 5.png" alt="Ahzam Sheikh " />
+      <div class="team-info"><div class="team-name">Ahzam Sheikh</div><div class="team-role">Chief Conservation Officer</div><div class="team-bio">9 years of field research across 5 continents. Former senior ecologist at WWF.</div></div>
+    </div>
+    <div class="team-card reveal reveal-delay-1">
+      <img class="team-img" src="Screenshot 4.png" alt="Arman ahmed" />
+      <div class="team-info"><div class="team-name">Arman ahmed</div><div class="team-role">Wildlife Biologist</div><div class="team-bio">Specializes in large mammal behavior with a focus on big cat populations in Africa and Asia.</div></div>
+    </div>
+    <div class="team-card reveal reveal-delay-2">
+      <img class="team-img" src="Screenshot 3.png" alt="Asad afzal" />
+      <div class="team-info"><div class="team-name">Asad afzal</div><div class="team-role">Lead Developer</div><div class="team-bio">Built the digital infrastructure powering this portal, replacing decades of paper-based park records.</div></div>
+    </div>
+    <div class="team-card reveal reveal-delay-3">
+      <img class="team-img" src="Screenshot 2.png" alt="Anwar khan" />
+      <div class="team-info"><div class="team-name">Anwar khan</div><div class="team-role">Content</div><div class="team-bio">Award-winning nature writer and educator dedicated to inspiring the next generation of conservationists.</div></div>
+    </div>
+     <div class="team-card reveal reveal-delay-3">
+      <img class="team-img" src="Screenshot 1.png"Bilal khan" />
+      <div class="team-info"><div class="team-name">bilal khan</div><div class="team-role">Education</div><div class="team-bio">Award-winning nature writer and educator dedicated to inspiring the next generation of conservationists.</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><div class="nav-logo" style="margin-bottom:1rem"><div class="logo-icon">🌲</div><div class="logo-text">National Parks<span>Explore the Wild</span></div></div><p>Your digital gateway to the world's most magnificent natural treasures.</p><div class="footer-socials"><a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a><a href="#" class="social-link"><i class="fab fa-twitter"></i></a><a href="#" class="social-link"><i class="fab fa-instagram"></i></a></div></div>
+    <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="parks.html">Parks List</a></li><li><a href="animal-info.html">Animal Info</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Top Parks</h4><ul><li><a href="parks.html">Yellowstone</a></li><li><a href="parks.html">Serengeti</a></li><li><a href="parks.html">Amazon</a></li><li><a href="parks.html">Jim Corbett</a></li><li><a href="parks.html">Banff</a></li></ul></div>
+    <div class="footer-col"><h4>Wildlife</h4><ul><li><a href="animal-info.html">Lions & Big Cats</a></li><li><a href="animal-info.html">Elephants</a></li><li><a href="animal-info.html">Eagles & Birds</a></li><li><a href="animal-info.html">Marine Life</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 National Parks Portal. Made with 🌿 for nature lovers worldwide.</p></div>
+</footer>
+
+<button id="back-top"><i class="fas fa-arrow-up"></i></button>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — National Parks Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .page-hero { height:50vh; min-height:340px; background:url('https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=1600&q=80') center/cover; position:relative; display:flex; align-items:center; justify-content:center; text-align:center; }
+    .page-hero::before { content:''; position:absolute; inset:0; background:rgba(10,30,10,0.6); }
+    .page-hero-content { position:relative; z-index:1; color:var(--white); }
+    .page-hero-content h1 { font-family:var(--font-display); font-size:clamp(2.2rem,5vw,3.8rem); letter-spacing:0.08em; }
+    .breadcrumb { display:flex; justify-content:center; gap:8px; align-items:center; color:rgba(255,255,255,0.5); font-size:0.82rem; margin-top:1rem; }
+    .breadcrumb a { color:var(--green-light); }
+
+    /* Masonry-style grid */
+    .masonry-grid { columns:4; column-gap:1rem; max-width:1400px; margin:0 auto; }
+    .masonry-item { break-inside:avoid; margin-bottom:1rem; border-radius:var(--radius); overflow:hidden; position:relative; cursor:pointer; }
+    .masonry-item img { width:100%; display:block; transition:transform 0.5s ease; }
+    .masonry-item:hover img { transform:scale(1.05); }
+    .masonry-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(10,30,10,0.8) 0%, transparent 50%); opacity:0; transition:var(--transition); display:flex; flex-direction:column; justify-content:flex-end; padding:1rem; }
+    .masonry-item:hover .masonry-overlay { opacity:1; }
+    .masonry-caption { color:var(--white); font-size:0.82rem; font-weight:600; }
+    .masonry-sub { color:rgba(255,255,255,0.6); font-size:0.72rem; margin-top:2px; }
+    .expand-icon { position:absolute; top:1rem; right:1rem; background:rgba(255,255,255,0.15); color:var(--white); width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8rem; opacity:0; transition:var(--transition); backdrop-filter:blur(4px); }
+    .masonry-item:hover .expand-icon { opacity:1; }
+
+    /* Lightbox enhanced */
+    .lightbox-nav { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); color:var(--white); width:50px; height:50px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.2rem; cursor:pointer; transition:var(--transition); backdrop-filter:blur(8px); }
+    .lightbox-nav:hover { background:var(--green-mid); }
+    #lightboxPrev { left:1.5rem; }
+    #lightboxNext { right:1.5rem; }
+    #lightboxCaption { position:absolute; bottom:1.5rem; left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.7); font-size:0.85rem; text-align:center; }
+    #lightboxCounter { position:absolute; top:1.5rem; left:1.5rem; color:rgba(255,255,255,0.5); font-size:0.8rem; background:rgba(0,0,0,0.4); padding:4px 12px; border-radius:20px; }
+
+    @media(max-width:1200px) { .masonry-grid { columns:3; } }
+    @media(max-width:768px) { .masonry-grid { columns:2; } }
+    @media(max-width:480px) { .masonry-grid { columns:1; } }
+  </style>
+</head>
+<body>
+
+<div id="loader"><div class="loader-logo">🌿 NATIONAL PARKS</div><div class="loader-bar"><div class="loader-bar-fill"></div></div></div>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="logo-icon">🌲</div><div class="logo-text">National Parks<span>Explore the Wild</span></div></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="parks.html">Parks List</a></li>
+      <li><a href="animal-info.html">Animal Info</a></li>
+      <li><a href="sitemap.html">Site Map</a></li>
+      <li><a href="gallery.html" class="active">Gallery</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <div class="hero-badge" style="margin:0 auto 1rem"><i class="fas fa-images"></i> Photo Collection</div>
+    <h1>Gallery</h1>
+    <p>Stunning photography from national parks around the world</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> <i class="fas fa-chevron-right" style="font-size:0.6rem"></i> <span>Gallery</span></div>
+  </div>
+</div>
+
+<section style="background:var(--cream); padding:70px 2rem;">
+  <div class="section-header">
+    <div class="section-tag">Visual Journey</div>
+    <h2 class="section-title">Nature Through the <em>Lens</em></h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="gallery-filter" style="margin-bottom:2.5rem;">
+    <button class="filter-btn active" data-filter="all">All Photos</button>
+    <button class="filter-btn" data-filter="parks">🏕️ Parks</button>
+    <button class="filter-btn" data-filter="animals">🦁 Animals</button>
+    <button class="filter-btn" data-filter="birds">🦅 Birds</button>
+    <button class="filter-btn" data-filter="nature">🌿 Nature</button>
+    <button class="filter-btn" data-filter="water">💧 Water</button>
+  </div>
+
+  <div class="masonry-grid" id="masonryGrid">
+
+    <div class="masonry-item" data-filter="parks" data-caption="Yellowstone, USA" data-img="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=500&q=80" alt="Yellowstone" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Yellowstone National Park</div><div class="masonry-sub">Wyoming, USA</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="animals" data-caption="African Lion, Serengeti" data-img="https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=500&q=80" alt="Lion" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">African Lion</div><div class="masonry-sub">Serengeti, Tanzania</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="nature" data-caption="Forest Path" data-img="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=500&q=80" alt="Forest" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Ancient Forest</div><div class="masonry-sub">Pacific Northwest, USA</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="birds" data-caption="Flamingos, Kenya" data-img="https://images.unsplash.com/photo-1607153333879-c174d265f1d2?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1607153333879-c174d265f1d2?w=500&q=80" alt="Flamingo" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Flamingo Colony</div><div class="masonry-sub">Lake Nakuru, Kenya</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="parks" data-caption="Banff NP, Canada" data-img="https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?w=500&q=80" alt="Banff" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Banff National Park</div><div class="masonry-sub">Alberta, Canada</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="animals" data-caption="African Elephant" data-img="https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=500&q=80" alt="Elephant" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">African Elephant</div><div class="masonry-sub">Amboseli, Kenya</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="water" data-caption="Ocean Sunrise" data-img="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&q=80" alt="Ocean" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Coastal Sunrise</div><div class="masonry-sub">Pacific Coast, USA</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="birds" data-caption="Bald Eagle in flight" data-img="https://images.unsplash.com/photo-1501706362039-c06b2d715385?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1501706362039-c06b2d715385?w=500&q=80" alt="Eagle" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Bald Eagle</div><div class="masonry-sub">Yellowstone, USA</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="nature" data-caption="Waterfall, Iceland" data-img="https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=500&q=80" alt="Waterfall" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Majestic Waterfall</div><div class="masonry-sub">Iceland</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="animals" data-caption="Bengal Tiger, India" data-img="https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=500&q=80" alt="Tiger" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Bengal Tiger</div><div class="masonry-sub">Jim Corbett, India</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="parks" data-caption="Grand Canyon, USA" data-img="https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=500&q=80" alt="Grand Canyon" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Grand Canyon</div><div class="masonry-sub">Arizona, USA</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="nature" data-caption="Alpine Mountains" data-img="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=500&q=80" alt="Mountains" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Alpine Peaks</div><div class="masonry-sub">Swiss National Park</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="water" data-caption="Plitvice Lakes" data-img="https://images.unsplash.com/photo-1555993539-1732b0258235?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=500&q=80" alt="Plitvice" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Plitvice Lakes</div><div class="masonry-sub">Croatia</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="animals" data-caption="Red Fox, Wilderness" data-img="https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=500&q=80" alt="Fox" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Red Fox</div><div class="masonry-sub">European Wilderness</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="parks" data-caption="Zhangjiajie, China" data-img="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=500&q=80" alt="Zhangjiajie" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Zhangjiajie Pillars</div><div class="masonry-sub">Hunan, China</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+    <div class="masonry-item" data-filter="water" data-caption="Tropical Beach" data-img="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1000&q=90">
+      <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=500&q=80" alt="Beach" loading="lazy" />
+      <div class="masonry-overlay"><div class="masonry-caption">Tropical Paradise</div><div class="masonry-sub">Great Barrier Reef, Australia</div></div>
+      <div class="expand-icon"><i class="fas fa-expand"></i></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LIGHTBOX (enhanced) -->
+<div id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">✕</button>
+  <button class="lightbox-nav" id="lightboxPrev"><i class="fas fa-chevron-left"></i></button>
+  <img id="lightboxImg" src="" alt="Gallery" />
+  <button class="lightbox-nav" id="lightboxNext"><i class="fas fa-chevron-right"></i></button>
+  <div id="lightboxCaption"></div>
+  <div id="lightboxCounter"></div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><div class="nav-logo" style="margin-bottom:1rem"><div class="logo-icon">🌲</div><div class="logo-text">National Parks<span>Explore the Wild</span></div></div><p>Your digital gateway to the world's most magnificent natural treasures.</p></div>
+    <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="parks.html">Parks List</a></li><li><a href="animal-info.html">Animal Info</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Gallery</h4><ul><li><a href="#">Park Landscapes</a></li><li><a href="#">Wildlife Photos</a></li><li><a href="#">Bird Photography</a></li><li><a href="#">Nature Scenes</a></li><li><a href="#">Water Features</a></li></ul></div>
+    <div class="footer-col"><h4>Connect</h4><ul><li><a href="contact.html">Contact Us</a></li><li><a href="sitemap.html">Site Map</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 National Parks Portal. Made with 🌿 for nature lovers worldwide.</p></div>
+</footer>
+
+<button id="back-top"><i class="fas fa-arrow-up"></i></button>
+<script src="script.js"></script>
+<script>
+// Masonry lightbox with navigation
+const items = Array.from(document.querySelectorAll('.masonry-item'));
+let currentIdx = 0;
+
+function openLightbox(idx) {
+  const visibleItems = items.filter(i => i.style.display !== 'none');
+  currentIdx = idx;
+  const item = visibleItems[currentIdx];
+  document.getElementById('lightboxImg').src = item.dataset.img || item.querySelector('img').src;
+  document.getElementById('lightboxCaption').textContent = item.dataset.caption || '';
+  document.getElementById('lightboxCounter').textContent = `${currentIdx + 1} / ${visibleItems.length}`;
+  document.getElementById('lightbox').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+items.forEach((item, i) => {
+  item.addEventListener('click', () => {
+    const visibleItems = items.filter(it => it.style.display !== 'none');
+    const vIdx = visibleItems.indexOf(item);
+    openLightbox(vIdx);
+  });
+});
+
+document.getElementById('lightboxClose').addEventListener('click', () => {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+});
+
+document.getElementById('lightboxPrev').addEventListener('click', (e) => {
+  e.stopPropagation();
+  const visibleItems = items.filter(i => i.style.display !== 'none');
+  currentIdx = (currentIdx - 1 + visibleItems.length) % visibleItems.length;
+  const item = visibleItems[currentIdx];
+  document.getElementById('lightboxImg').src = item.dataset.img || item.querySelector('img').src;
+  document.getElementById('lightboxCaption').textContent = item.dataset.caption || '';
+  document.getElementById('lightboxCounter').textContent = `${currentIdx + 1} / ${visibleItems.length}`;
+});
+
+document.getElementById('lightboxNext').addEventListener('click', (e) => {
+  e.stopPropagation();
+  const visibleItems = items.filter(i => i.style.display !== 'none');
+  currentIdx = (currentIdx + 1) % visibleItems.length;
+  const item = visibleItems[currentIdx];
+  document.getElementById('lightboxImg').src = item.dataset.img || item.querySelector('img').src;
+  document.getElementById('lightboxCaption').textContent = item.dataset.caption || '';
+  document.getElementById('lightboxCounter').textContent = `${currentIdx + 1} / ${visibleItems.length}`;
+});
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('active')) return;
+  if (e.key === 'ArrowLeft') document.getElementById('lightboxPrev').click();
+  if (e.key === 'ArrowRight') document.getElementById('lightboxNext').click();
+  if (e.key === 'Escape') document.getElementById('lightboxClose').click();
+});
+
+// Filter for masonry
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    items.forEach(item => {
+      item.style.display = (filter === 'all' || item.dataset.filter === filter) ? '' : 'none';
+    });
+  });
+});
+</script>
+</body>
+</html>

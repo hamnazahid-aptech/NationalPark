@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parks List — National Parks Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .page-hero { height:50vh; min-height:340px; background:url('https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1600&q=80') center/cover; position:relative; display:flex; align-items:center; justify-content:center; text-align:center; }
+    .page-hero::before { content:''; position:absolute; inset:0; background:rgba(10,30,10,0.6); }
+    .page-hero-content { position:relative; z-index:1; color:var(--white); }
+    .page-hero-content h1 { font-family:var(--font-display); font-size:clamp(2.2rem,5vw,3.8rem); letter-spacing:0.08em; }
+    .breadcrumb { display:flex; justify-content:center; gap:8px; align-items:center; color:rgba(255,255,255,0.5); font-size:0.82rem; margin-top:1rem; }
+    .breadcrumb a { color:var(--green-light); }
+
+    /* Search & Filter Bar */
+    .filter-bar { background:var(--white); border-bottom:1px solid #eee; padding:1.5rem 2rem; position:sticky; top:72px; z-index:100; box-shadow:0 4px 20px rgba(0,0,0,0.06); }
+    .filter-inner { max-width:1300px; margin:0 auto; display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+    .search-box { flex:1; min-width:220px; position:relative; }
+    .search-box input { width:100%; padding:10px 16px 10px 42px; border:2px solid #e8ede8; border-radius:8px; font-family:var(--font-body); font-size:0.9rem; outline:none; transition:var(--transition); }
+    .search-box input:focus { border-color:var(--green-light); }
+    .search-box i { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#aaa; }
+    .continent-filter { display:flex; gap:0.4rem; flex-wrap:wrap; }
+    .cf-btn { padding:8px 16px; border-radius:20px; border:2px solid #e8ede8; background:transparent; font-size:0.78rem; font-weight:700; cursor:pointer; font-family:var(--font-body); color:var(--green-dark); transition:var(--transition); }
+    .cf-btn.active,.cf-btn:hover { background:var(--green-mid); border-color:var(--green-mid); color:var(--white); }
+    .result-count { color:#888; font-size:0.82rem; white-space:nowrap; }
+
+    /* Parks Grid */
+    .all-parks-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:2rem; max-width:1400px; margin:0 auto; }
+
+    /* Detail Modal */
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:3000; display:flex; align-items:center; justify-content:center; padding:1rem; opacity:0; visibility:hidden; transition:var(--transition); }
+    .modal-overlay.active { opacity:1; visibility:visible; }
+    .modal { background:var(--white); border-radius:var(--radius-lg); max-width:720px; width:100%; max-height:90vh; overflow-y:auto; }
+    .modal-img { width:100%; height:280px; object-fit:cover; border-radius:var(--radius-lg) var(--radius-lg) 0 0; }
+    .modal-body { padding:2rem; }
+    .modal-body h2 { font-family:var(--font-heading); font-size:1.8rem; color:var(--green-dark); margin-bottom:0.5rem; }
+    .modal-meta { display:flex; gap:1.5rem; margin-bottom:1.2rem; flex-wrap:wrap; }
+    .modal-meta span { display:flex; align-items:center; gap:6px; font-size:0.82rem; color:#666; }
+    .modal-body p { color:#555; line-height:1.8; margin-bottom:1rem; }
+    .modal-section { margin-top:1.5rem; }
+    .modal-section h4 { font-family:var(--font-heading); color:var(--green-dark); margin-bottom:0.8rem; font-size:1.1rem; border-bottom:2px solid var(--green-pale); padding-bottom:0.4rem; }
+    .modal-list { display:flex; flex-wrap:wrap; gap:8px; }
+    .modal-tag { background:rgba(82,183,136,0.12); color:var(--green-dark); border:1px solid var(--green-pale); font-size:0.78rem; padding:4px 12px; border-radius:20px; font-weight:600; }
+    .modal-close { float:right; background:none; border:none; font-size:1.5rem; cursor:pointer; color:#999; margin:-0.5rem -0.5rem 0 0; }
+    .modal-close:hover { color:var(--green-dark); }
+
+    /* Table view */
+    .view-toggle { display:flex; gap:6px; }
+    .vt-btn { width:36px; height:36px; border:2px solid #e8ede8; border-radius:6px; background:transparent; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#aaa; transition:var(--transition); }
+    .vt-btn.active { border-color:var(--green-mid); color:var(--green-mid); background:rgba(82,183,136,0.08); }
+
+    .parks-list-view { display:none; max-width:1400px; margin:0 auto; }
+    .parks-list-view.active { display:block; }
+    .all-parks-grid.grid-hidden { display:none; }
+  </style>
+</head>
+<body>
+
+<div id="loader"><div class="loader-logo">🌿 NATIONAL PARKS</div><div class="loader-bar"><div class="loader-bar-fill"></div></div></div>
+
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><div class="logo-icon">🌲</div><div class="logo-text">National Parks<span>Explore the Wild</span></div></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="parks.html" class="active">Parks List</a></li>
+      <li><a href="animal-info.html">Animal Info</a></li>
+      <li><a href="sitemap.html">Site Map</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <div class="hero-badge" style="margin:0 auto 1rem"><i class="fas fa-map-marked-alt"></i> Explore All Parks</div>
+    <h1>National Parks List</h1>
+    <p>Discover, filter & explore parks from every corner of the world</p>
+    <div class="breadcrumb"><a href="index.html">Home</a> <i class="fas fa-chevron-right" style="font-size:0.6rem"></i> <span>Parks List</span></div>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" id="parkSearch" placeholder="Search parks, countries..." />
+    </div>
+    <div class="continent-filter">
+      <button class="cf-btn active" data-continent="all">All</button>
+      <button class="cf-btn" data-continent="north-america">Americas</button>
+      <button class="cf-btn" data-continent="africa">Africa</button>
+      <button class="cf-btn" data-continent="asia">Asia</button>
+      <button class="cf-btn" data-continent="europe">Europe</button>
+      <button class="cf-btn" data-continent="oceania">Oceania</button>
+    </div>
+    <div class="view-toggle">
+      <button class="vt-btn active" id="gridViewBtn" title="Grid View"><i class="fas fa-th"></i></button>
+      <button class="vt-btn" id="listViewBtn" title="List View"><i class="fas fa-list"></i></button>
+    </div>
+    <div class="result-count" id="resultCount">Showing 12 parks</div>
+  </div>
+</div>
+
+<!-- PARKS GRID -->
+<section style="padding:60px 2rem; background:var(--cream);">
+  <div class="all-parks-grid" id="parksGrid">
+
+    <div class="park-card reveal" data-continent="north-america" data-name="yellowstone" data-country="USA">
+      <div class="park-img"><img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=600&q=80" alt="Yellowstone" loading="lazy" /><span class="park-badge">USA</span><span class="park-rating">⭐ 4.9</span></div>
+      <div class="park-info"><h3 class="park-name">Yellowstone National Park</h3><div class="park-location"><i class="fas fa-map-marker-alt"></i> Wyoming, USA</div><p class="park-desc">World's first national park, famous for geysers, hot springs, and rich wildlife including bison and grizzly bears.</p><div class="park-tags"><span class="park-tag">🐻 Bears</span><span class="park-tag">🦬 Bison</span><span class="park-tag">🌋 Geysers</span></div><div class="park-footer"><div class="park-fee">Entry: <strong>$35/vehicle</strong></div><button class="park-btn" onclick="openModal('yellowstone')">Details →</button></div></div>
+    </div>
+
+    <div class="park-card reveal reveal-delay-1" data-continent="north-america" data-name="grand-canyon" data-country="USA">
+      <div class="park-img"><img src="https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=600&q=80" alt="Grand Canyon" loading="lazy" /><span class="park-badge">USA</span><span class="park-rating">⭐ 4.9</span></div>
+      <div class="park-info"><h3 class="park-name">Grand Canyon National Park</h3><div class="park-location"><i class="fas fa-map-marker-alt"></i> Arizona, USA</div><p class="park-desc">One of the world's great natural wonders — a mile deep canyon carved by the Colorado River over millions of years.</p><div class="park-tags"><span class="park-tag">🦅 Condors</span><span class="park-tag">🦎 Reptiles</span><span class="park-tag">🏜️ Desert</span></div><div class="park-footer"><div class="park-fee">Entry: <strong>$35/vehicle</strong></div><button class="park-btn" onclick="openModal('grand-canyon')">Details →</button></div></div>
+    </div>
+
+    <div class="park-card reveal reveal-delay-2" data-continent="north-america" data-name="banff" data-country="Canada">
+      <div class="park-img"><img src="https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?w=600&q=80" alt="Banff" loading="lazy" /><span class="park-badge">Canada</span><span class="park-rating">⭐ 4.9</span></div>
+      <div class="park-info"><h3 class="park-name">Banff National Park</h3><div class="park-location"><i class="fas fa-map-marker-alt"></i> Alberta, Canada</div><p class="park-desc">Canada's oldest national park with turquoise lakes, glaciers, and rugged mountain terrain in the Canadian Rockies.</p><div class="park-tags"><span class="park-tag">🦌 Elk</span><span class="park-tag">🐺 Wolves</span><span class="park-tag">❄️ Glaciers</span></div><div class="park-footer"><div class="park-fee">Entry: <strong>CA$10/day</strong></div><button class="park-btn" onclick="openModal('banff')">Details →</button></div></div>
+    </div>
+
+    <div class="park-card reveal" data-continent="africa" data-name="serengeti" data-country="Tanzania">
+      <div class="park-img"><img src="https://images.unsplash.com/photo-1547970827-e39a2f432903?w=600&q=80" alt="Serengeti" loading="lazy" /><span class="park-badge">Tanzania</span><span class="park-rating">⭐ 4.9</span></div>
+      <div class="park-info"><h3 class="park-name">Serengeti National Park</h3><div class="park-location"><i class="fas fa-map-marker-alt"></i> Tanzania, Africa</div><p class="park-desc">Witness the greatest wildlife migration on Earth — 1.5 million wildebeest crossing the vast Serengeti plains.</p><div class="park-tags"><span class="park-tag">🦁 Lions</span><span class="park-tag">🐘 Elephants</span><span class="park-tag">🦒 Giraffes</span></div><div class="park-footer"><div class="park-fee">Entry: <strong>$70/day</strong></div><button class="park-btn" onclick="openModal('serengeti')">Details →</button></div></div>
+    </div>
+
+    <div class="park-card reveal reveal-delay-1" data-continent="africa" data-name="kruger" data-country="South Africa">
+      <div class="park-img"><img src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600&q=80" alt="Kruger" loading="lazy" /><span class="park-badge">South Africa</span><span class="park-rating">⭐ 4.8</span></div>
+      <div class="park-info"><h3 class="park-name">Kruger National Park</h3><div class="park-location"><i class="fas fa-map-marker-alt"></i> Limpopo, South Africa</div><p class="park-desc">Africa's premier safari destination, home to the Big Five and one of the largest game reserves on the continent.</p><div class="park-tags"><span class="park-tag">🐆 Leopards</span><span class="park-tag">🦏 Rhinos</span><span class="park-tag">🦓 Zebras</span></div><div class="park-footer"><div class="park-fee">Entry: <strong>R402/day</strong></div><button class="park-btn" onclick="openModal('kruger')">Details →</button></div></div>
+    </div>
+
+    <div class="park-card reveal reveal-delay-2" data-continent="africa" data-name="nakuru" data-country="Kenya">
+      <div class="park-img"><img src="https://images.unsplash.com/photo-1607153333879-c174d265f1d2?w=600&q=80" alt="Nakuru" loading="lazy" /><span class="park-badge">Kenya</span><span class="park-rating">⭐ 4.7</span></div>
+      <div class="park-info"><h3 class="park-name">Lake Nakuru National Park</h3><div class="park-location"><i class="fas fa-map-marker-alt"></i> Rift Valley, Kenya</div><p class="park-desc">Famous for millions of flamingos turning the lake pink, plus white and black rhinos in a stunning setting.</p><div class="park-tags"><span class="park-tag">🦩 Flamingos</span><span class="park-tag">🦏 Rhinos</span><span class="park-tag">🐦 Birds</span></div><div class="park-footer"><div class="park-fee">Entry: <strong>$60/day</strong></div><button class="park-btn" onclick="openModal('nakuru')">Details →</button></div></div>
+    </div>
+
+    <div class="park-card reveal" data-continent="asia" data-name="corbett" data-country="India">
+      <div class="park-img"><img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=600&q=80" alt="Jim Corbett" loading="lazy" /><span class="park-badge">India</span><span class="park-rating">⭐ 4.8</span></div>
+      <div class="park-info"><h3 class="park-name">Jim Corbett National Park</h3><div class="park-location"><i class="fas fa-map-marker-alt"></i> Uttarakhand, India</div><p class="park-desc">India's oldest national park, renowned for Bengal tigers, Asian elephants, and 600+ species of birds.</p><div class="park-tags"><span class="park-tag">🐯 Tigers</span><span class="park-tag">🐘 Elephants</span><span class="park-tag">🦅 Eagles</span></div><div class="park-footer"><div class="park-fee">Entry: <strong>₹2,500</strong></div><button class="park-btn" onclick="openModal('corbett')">Details →</button></div></div>
+    </div>
+
+    <div class="park-card reveal reveal-delay-1" data-continent="asia" data-name="amazon" data-country="Brazil">
+      <div class="park-img"><img src="https://images.unsplash.com/photo-1551085254-e96b210db58a?w=600&q=80" alt="Amazon" loading="lazy" /><span class="park-badge">Brazil</span><span class="park-rating">⭐ 4.8</span></div>
+      <div class="park-info"><h3 class="park-name">Amazon National Park</h3><div class="park-location"><i class="fas fa-map-marker-alt"></i> Amazonas, Brazil</div><p class="park-desc">The lungs of the Earth — a vast tropical rainforest with millions of species in an unparalleled ecosystem.</p><div class="park-tags"><span class="park-tag">🐆 Jaguars</span><span class="park-tag">🦜 Macaws</span><span class="park-tag">🌴 Rainforest</span></div><div class="park-footer"><div class="park-fee">Entry: <strong>Free</strong></div><button class="park-btn" onclick="openModal('amazon')">Details →</button></div></div>
+    </div>
+
+    <div class="park-card reveal reveal-delay-2" data-continent="asia" data-name="zhangjiajie" data-country="China">
+      <div class="park-img"><img src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=600&q=80" alt="Zhangjiajie" loading="lazy" /><span class="park-badge">China</span><span class="park-rating">⭐ 4.9</span></div>
+      <div class="park-info"><h3 class="park-name">Zhangjiajie National Park</h3><div class="park-location"><i class="fas fa-map-marker-alt"></i> Hunan, China</div><p class="park-desc">Towering sandstone pillars draped in mist — the real-world inspiration for the floating mountains in Avatar.</p><div class="park-tags"><span class="park-tag">🐒 Monkeys</span><span class="park-tag">🦅 Birds</span><span class="park-tag">⛰️ Pillars</span></div><div class="park-footer"><div class="park-fee">Entry: <strong>¥248</strong></div><button class="park-btn" onclick="openModal('zhangjiajie')">Details →</button></div></div>
+    </div>
+
+    <div class="park-card reveal" data-continent="europe" data-name="swiss" data-country="Switzerland">
+      <div class="park-img"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="Swiss NP" loading="lazy" /><span class="park-badge">Switzerland</span><span class="park-rating">⭐ 4.8</span></div>
+      <div class="park-info"><h3 class="park-name">Swiss National Park</h3><div class="park-location"><i class="fas fa-map-marker-alt"></i> Graubünden, Switzerland</div><p class="park-desc">Switzerland's only national park — a pristine alpine wilderness with ibex, chamois, golden eagles and glacial valleys.</p><div class="park-tags"><span class="park-tag">🦌 Ibex</span><span class="park-tag">🦅 Eagles</span><span class="park-tag">🏔️ Alps</span></div><div class="park-footer"><div class="park-fee">Entry: <strong>Free</strong></div><button class="park-btn" onclick="openModal('swiss')">Details →</button></div></div>
+    </div>
+
+    <div class="park-card reveal reveal-delay-1" data-continent="europe" data-name="plitvice" data-country="Croatia">
+      <div class="park-img"><img src="https://images.unsplash.com/photo-1555993539-1732b0258235?w=600&q=80" alt="Plitvice" loading="lazy" /><span class="park-badge">Croatia</span><span class="park-rating">⭐ 4.9</span></div>
+      <div class="park-info"><h3 class="park-name">Plitvice Lakes National Park</h3><div class="park-location"><i class="fas fa-map-marker-alt"></i> Lika, Croatia</div><p class="park-desc">A UNESCO World Heritage site of 16 terraced lakes connected by waterfalls — one of Europe's most beautiful parks.</p><div class="park-tags"><span class="park-tag">🐟 Fish</span><span class="park-tag">🦌 Deer</span><span class="park-tag">💧 Waterfalls</span></div><div class="park-footer"><div class="park-fee">Entry: <strong>€33</strong></div><button class="park-btn" onclick="openModal('plitvice')">Details →</button></div></div>
+    </div>
+
+    <div class="park-card reveal reveal-delay-2" data-continent="oceania" data-name="barrier-reef" data-country="Australia">
+      <div class="park-img"><img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=80" alt="Great Barrier Reef" loading="lazy" /><span class="park-badge">Australia</span><span class="park-rating">⭐ 5.0</span></div>
+      <div class="park-info"><h3 class="park-name">Great Barrier Reef Marine Park</h3><div class="park-location"><i class="fas fa-map-marker-alt"></i> Queensland, Australia</div><p class="park-desc">The world's largest coral reef — a breathtaking underwater world hosting thousands of marine species.</p><div class="park-tags"><span class="park-tag">🐢 Sea Turtles</span><span class="park-tag">🦈 Sharks</span><span class="park-tag">🐠 Coral</span></div><div class="park-footer"><div class="park-fee">Entry: <strong>AU$6.50</strong></div><button class="park-btn" onclick="openModal('barrier-reef')">Details →</button></div></div>
+    </div>
+
+  </div>
+
+  <!-- LIST VIEW -->
+  <div class="parks-list-view" id="parksListView">
+    <div class="parks-table-wrap">
+      <table class="parks-table">
+        <thead><tr><th>#</th><th>Park Name</th><th>Country</th><th>Continent</th><th>Key Animals</th><th>Entry Fee</th><th>Rating</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>01</td><td class="park-name-cell">Yellowstone NP</td><td>🇺🇸 USA</td><td>North America</td><td>Bear, Bison, Wolf</td><td>$35/vehicle</td><td>⭐ 4.9</td><td><span class="status-badge status-open">Open</span></td></tr>
+          <tr><td>02</td><td class="park-name-cell">Grand Canyon NP</td><td>🇺🇸 USA</td><td>North America</td><td>Condor, Cougar</td><td>$35/vehicle</td><td>⭐ 4.9</td><td><span class="status-badge status-open">Open</span></td></tr>
+          <tr><td>03</td><td class="park-name-cell">Banff NP</td><td>🇨🇦 Canada</td><td>North America</td><td>Elk, Wolf, Bear</td><td>CA$10/day</td><td>⭐ 4.9</td><td><span class="status-badge status-open">Open</span></td></tr>
+          <tr><td>04</td><td class="park-name-cell">Serengeti NP</td><td>🇹🇿 Tanzania</td><td>Africa</td><td>Lion, Elephant, Giraffe</td><td>$70/day</td><td>⭐ 4.9</td><td><span class="status-badge status-open">Open</span></td></tr>
+          <tr><td>05</td><td class="park-name-cell">Kruger NP</td><td>🇿🇦 South Africa</td><td>Africa</td><td>Leopard, Rhino, Hippo</td><td>R402/day</td><td>⭐ 4.8</td><td><span class="status-badge status-open">Open</span></td></tr>
+          <tr><td>06</td><td class="park-name-cell">Lake Nakuru NP</td><td>🇰🇪 Kenya</td><td>Africa</td><td>Flamingo, Rhino</td><td>$60/day</td><td>⭐ 4.7</td><td><span class="status-badge status-open">Open</span></td></tr>
+          <tr><td>07</td><td class="park-name-cell">Jim Corbett NP</td><td>🇮🇳 India</td><td>Asia</td><td>Tiger, Elephant, Eagle</td><td>₹2,500</td><td>⭐ 4.8</td><td><span class="status-badge status-limited">Seasonal</span></td></tr>
+          <tr><td>08</td><td class="park-name-cell">Amazon NP</td><td>🇧🇷 Brazil</td><td>South America</td><td>Jaguar, Macaw, Anaconda</td><td>Free</td><td>⭐ 4.8</td><td><span class="status-badge status-open">Open</span></td></tr>
+          <tr><td>09</td><td class="park-name-cell">Zhangjiajie NP</td><td>🇨🇳 China</td><td>Asia</td><td>Monkey, Eagle</td><td>¥248</td><td>⭐ 4.9</td><td><span class="status-badge status-open">Open</span></td></tr>
+          <tr><td>10</td><td class="park-name-cell">Swiss National Park</td><td>🇨🇭 Switzerland</td><td>Europe</td><td>Ibex, Chamois, Eagle</td><td>Free</td><td>⭐ 4.8</td><td><span class="status-badge status-open">Open</span></td></tr>
+          <tr><td>11</td><td class="park-name-cell">Plitvice Lakes NP</td><td>🇭🇷 Croatia</td><td>Europe</td><td>Deer, Lynx, Otter</td><td>€33</td><td>⭐ 4.9</td><td><span class="status-badge status-open">Open</span></td></tr>
+          <tr><td>12</td><td class="park-name-cell">Great Barrier Reef</td><td>🇦🇺 Australia</td><td>Oceania</td><td>Turtle, Shark, Coral Fish</td><td>AU$6.50</td><td>⭐ 5.0</td><td><span class="status-badge status-limited">Protected</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PARK DETAIL MODAL -->
+<div class="modal-overlay" id="parkModal">
+  <div class="modal" id="modalContent">
+    <img id="modalImg" src="" alt="" class="modal-img" />
+    <div class="modal-body">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h2 id="modalName"></h2>
+      <div class="modal-meta">
+        <span><i class="fas fa-map-marker-alt" style="color:var(--green-mid)"></i> <span id="modalLocation"></span></span>
+        <span><i class="fas fa-star" style="color:#ffd700"></i> <span id="modalRating"></span></span>
+        <span><i class="fas fa-ticket-alt" style="color:var(--brown)"></i> <span id="modalFee"></span></span>
+      </div>
+      <p id="modalDesc"></p>
+      <div class="modal-section"><h4>🦁 Wildlife</h4><div class="modal-list" id="modalAnimals"></div></div>
+      <div class="modal-section"><h4>🌿 Facilities</h4><div class="modal-list" id="modalFacilities"></div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><div class="nav-logo" style="margin-bottom:1rem"><div class="logo-icon">🌲</div><div class="logo-text">National Parks<span>Explore the Wild</span></div></div><p>Your digital gateway to the world's most magnificent natural treasures.</p></div>
+    <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="about.html">About Us</a></li><li><a href="parks.html">Parks List</a></li><li><a href="animal-info.html">Animal Info</a></li><li><a href="gallery.html">Gallery</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Continents</h4><ul><li><a href="#">North America</a></li><li><a href="#">Africa</a></li><li><a href="#">Asia</a></li><li><a href="#">Europe</a></li><li><a href="#">Oceania</a></li></ul></div>
+    <div class="footer-col"><h4>Resources</h4><ul><li><a href="sitemap.html">Site Map</a></li><li><a href="contact.html">Contact Us</a></li><li><a href="gallery.html">Gallery</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2024 National Parks Portal. Made with 🌿 for nature lovers worldwide.</p></div>
+</footer>
+
+<button id="back-top"><i class="fas fa-arrow-up"></i></button>
+
+<script src="script.js"></script>
+<script>
+const parkData = {
+  'yellowstone': { name:'Yellowstone National Park', location:'Wyoming, USA', rating:'4.9', fee:'$35/vehicle', img:'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=800&q=80', desc:'The world\'s first national park was established in 1872 and spans 3,500 square miles of volcanic land with 10,000+ hydrothermal features including Old Faithful geyser. It sits atop a supervolcano and hosts some of North America\'s most spectacular wildlife.', animals:['Grizzly Bear','American Bison','Gray Wolf','Elk','Moose','Pronghorn','Bald Eagle','Trumpeter Swan','Osprey'], facilities:['Visitor Centers','Camping Sites','Hiking Trails','Lodges','Gift Shops','Ranger Programs','Accessible Paths'] },
+  'grand-canyon': { name:'Grand Canyon National Park', location:'Arizona, USA', rating:'4.9', fee:'$35/vehicle', img:'https://images.unsplash.com/photo-1474044159687-1ee9f3a51722?w=800&q=80', desc:'One of Earth\'s great natural wonders, carved by the Colorado River over 5 to 6 million years. The canyon is 277 miles long, up to 18 miles wide, and over a mile deep, revealing two billion years of geological history.', animals:['California Condor','Mule Deer','Mountain Lion','Coyote','Rock Squirrel','Western Diamondback Rattlesnake','Peregrine Falcon'], facilities:['South Rim Visitor Center','North Rim Lodge','Camping','Mule Rides','River Rafting','Helicopter Tours','Restaurants'] },
+  'banff': { name:'Banff National Park', location:'Alberta, Canada', rating:'4.9', fee:'CA$10/day', img:'https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?w=800&q=80', desc:'Canada\'s oldest national park, established in 1885, covers 6,641 sq km of the Canadian Rockies. Known for turquoise glacial lakes like Lake Louise and Moraine Lake, dramatic mountain scenery, and abundant wildlife.', animals:['Canadian Elk','Grizzly Bear','Black Bear','Gray Wolf','Wolverine','Mountain Goat','Bighorn Sheep','Golden Eagle'], facilities:['Town of Banff','Hot Springs','Ski Resorts','Gondola','Camping','Canoeing','Wildlife Watching Tours'] },
+  'serengeti': { name:'Serengeti National Park', location:'Tanzania, Africa', rating:'4.9', fee:'$70/day', img:'https://images.unsplash.com/photo-1547970827-e39a2f432903?w=800&q=80', desc:'The Serengeti hosts the world\'s largest terrestrial mammal migration — over 1.5 million wildebeest, 500,000 gazelles and 200,000 zebras. The annual Great Migration is one of nature\'s most spectacular events, listed as a UNESCO World Heritage Site.', animals:['African Lion','African Elephant','Cheetah','Leopard','African Wild Dog','Wildebeest','Hippopotamus','Nile Crocodile','Secretary Bird'], facilities:['Safari Lodges','Tented Camps','Game Drives','Hot Air Balloon Rides','Guided Walking Safaris','Photography Hides'] },
+  'kruger': { name:'Kruger National Park', location:'Limpopo, South Africa', rating:'4.8', fee:'R402/day', img:'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=800&q=80', desc:'One of Africa\'s largest game reserves, covering 19,485 sq km. Kruger is home to the Big Five — lion, leopard, rhino, elephant and buffalo — and over 500 bird species. It is the flagship of South African national parks.', animals:['African Lion','Leopard','African Elephant','White Rhino','African Buffalo','Spotted Hyena','Impala','Giraffe','Crocodile'], facilities:['Rest Camps','Bushveld Camps','Bush Lodges','4x4 Trails','Bush Walks','Night Drives','Restaurants & Shops'] },
+  'nakuru': { name:'Lake Nakuru National Park', location:'Rift Valley, Kenya', rating:'4.7', fee:'$60/day', img:'https://images.unsplash.com/photo-1607153333879-c174d265f1d2?w=800&q=80', desc:'Lake Nakuru is a shallow alkaline lake in Kenya\'s Rift Valley, famous for its staggering flamingo population — sometimes over a million birds paint the lake shores pink. The park also protects both black and white rhinos.', animals:['Lesser Flamingo','Greater Flamingo','White Rhino','Black Rhino','Rothschild Giraffe','African Buffalo','Pelican','African Fish Eagle'], facilities:['Sarova Lion Hill Lodge','Camping','Game Drives','Bird Watching Points','Visitor Center'] },
+  'corbett': { name:'Jim Corbett National Park', location:'Uttarakhand, India', rating:'4.8', fee:'₹2,500', img:'https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=800&q=80', desc:'Established in 1936, Jim Corbett is India\'s oldest national park and one of the first to join Project Tiger. Situated in the foothills of the Himalayas, it covers 520 sq km of diverse habitat and is home to over 600 bird species.', animals:['Bengal Tiger','Asian Elephant','Leopard','Gharial','Mugger Crocodile','King Cobra','Asian Black Bear','Great Hornbill','Crested Serpent Eagle'], facilities:['Eco-Tourism Zone Safaris','Elephant Rides','Dhikala Forest Rest House','Birding Trails','Corbett Museum'] },
+  'amazon': { name:'Amazon National Park', location:'Amazonas, Brazil', rating:'4.8', fee:'Free', img:'https://images.unsplash.com/photo-1551085254-e96b210db58a?w=800&q=80', desc:'Covering 9.94 million sq km, the Amazon rainforest is the world\'s largest tropical rainforest. The Amazon National Park protects a significant portion, hosting an estimated 10% of all species on Earth including thousands yet to be discovered.', animals:['Jaguar','Giant Anteater','Amazon River Dolphin','Anaconda','Poison Dart Frog','Scarlet Macaw','Harpy Eagle','Giant River Otter','Tapir'], facilities:['River Boat Tours','Eco-Lodges','Canopy Walkways','Indigenous Community Visits','Research Stations'] },
+  'zhangjiajie': { name:'Zhangjiajie National Park', location:'Hunan, China', rating:'4.9', fee:'¥248', img:'https://images.unsplash.com/photo-1547036967-23d11aacaee0?w=800&q=80', desc:'China\'s first national forest park, established in 1982, features thousands of towering quartzite sandstone pillars — some over 200m tall. It inspired the floating Hallelujah Mountains in the film Avatar and is a UNESCO World Heritage Site.', animals:['Chinese Giant Salamander','Rhesus Macaque','Chinese Muntjac','Sambar Deer','Clouded Leopard','Asian Black Bear','Golden Pheasant','Reeve\'s Pheasant'], facilities:['Glass Skywalk','Cable Car','Bailong Elevator','Hiking Trails','Hotel Accommodations','Photography Tours'] },
+  'swiss': { name:'Swiss National Park', location:'Graubünden, Switzerland', rating:'4.8', fee:'Free', img:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80', desc:'Switzerland\'s only national park, founded in 1914, is one of the oldest in Europe. Covering 170 sq km of Alpine wilderness in the Lower Engadin valley, it has been left to regenerate naturally for over a century with minimal human intervention.', animals:['Alpine Ibex','Chamois','Red Deer','Brown Bear','Golden Eagle','Bearded Vulture','Eurasian Lynx','Rock Ptarmigan','Marmot'], facilities:['National Park Centre Zernez','Marked Hiking Trails (80km)','Wildlife Observation Points','Visitor Information','Hotel Accommodations in nearby villages'] },
+  'plitvice': { name:'Plitvice Lakes National Park', location:'Lika, Croatia', rating:'4.9', fee:'€33', img:'https://images.unsplash.com/photo-1555993539-1732b0258235?w=800&q=80', desc:'A UNESCO World Heritage site since 1979, Plitvice Lakes consists of 16 terraced lakes joined by waterfalls. The crystal-clear lakes change color from azure to green depending on minerals and light — it is Croatia\'s most visited national park.', animals:['Brown Bear','Eurasian Lynx','Grey Wolf','European Otter','Wild Boar','Red Deer','White-tailed Eagle','Black Stork','Kingfisher'], facilities:['Wooden Boardwalks','Boat Rides','Electric Train','Visitor Centers (2)','Camping','On-site Restaurants','Hotels'] },
+  'barrier-reef': { name:'Great Barrier Reef Marine Park', location:'Queensland, Australia', rating:'5.0', fee:'AU$6.50', img:'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=80', desc:'The world\'s largest coral reef system, stretching 2,300 km along Australia\'s northeastern coast. It hosts over 1,500 species of fish, 4,000 mollusc species, 240 species of birds, and six of the world\'s seven sea turtle species.', animals:['Green Sea Turtle','Loggerhead Turtle','Reef Shark','Manta Ray','Dugong','Humpback Whale','Dwarf Minke Whale','Saltwater Crocodile','Clownfish'], facilities:['Snorkeling Tours','Scuba Diving','Glass-Bottom Boat Tours','Helicopter Flights','Island Resorts','Marine Research Stations'] }
+};
+
+function openModal(id) {
+  const p = parkData[id];
+  if (!p) return;
+  document.getElementById('modalImg').src = p.img;
+  document.getElementById('modalName').textContent = p.name;
+  document.getElementById('modalLocation').textContent = p.location;
+  document.getElementById('modalRating').textContent = p.rating;
+  document.getElementById('modalFee').textContent = p.fee;
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalAnimals').innerHTML = p.animals.map(a => `<span class="modal-tag">${a}</span>`).join('');
+  document.getElementById('modalFacilities').innerHTML = p.facilities.map(f => `<span class="modal-tag">${f}</span>`).join('');
+  document.getElementById('parkModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  document.getElementById('parkModal').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.getElementById('parkModal').addEventListener('click', e => { if (e.target === document.getElementById('parkModal')) closeModal(); });
+
+// Search
+document.getElementById('parkSearch').addEventListener('input', filterParks);
+document.querySelectorAll('.cf-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.cf-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); filterParks(); }); });
+
+function filterParks() {
+  const search = document.getElementById('parkSearch').value.toLowerCase();
+  const continent = document.querySelector('.cf-btn.active').dataset.continent;
+  let count = 0;
+  document.querySelectorAll('#parksGrid .park-card').forEach(card => {
+    const name = card.dataset.name || '';
+    const country = (card.dataset.country || '').toLowerCase();
+    const matchSearch = name.includes(search) || country.includes(search);
+    const matchContinent = continent === 'all' || card.dataset.continent === continent;
+    if (matchSearch && matchContinent) { card.style.display = ''; count++; } else { card.style.display = 'none'; }
+  });
+  document.getElementById('resultCount').textContent = `Showing ${count} park${count !== 1 ? 's' : ''}`;
+}
+
+// View toggle
+document.getElementById('gridViewBtn').addEventListener('click', () => {
+  document.getElementById('gridViewBtn').classList.add('active');
+  document.getElementById('listViewBtn').classList.remove('active');
+  document.getElementById('parksGrid').classList.remove('grid-hidden');
+  document.getElementById('parksListView').classList.remove('active');
+});
+document.getElementById('listViewBtn').addEventListener('click', () => {
+  document.getElementById('listViewBtn').classList.add('active');
+  document.getElementById('gridViewBtn').classList.remove('active');
+  document.getElementById('parksGrid').classList.add('grid-hidden');
+  document.getElementById('parksListView').classList.add('active');
+});
+</script>
+</body>
+</html>

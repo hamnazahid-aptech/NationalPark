@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>National Parks — Explore the Wild World</title>
+  <meta name="description" content="Discover the world's most breathtaking national parks. Explore wildlife, nature, and adventure." />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* Page-specific hero image fallbacks using gradient overlays */
+    .slide-1 { background-image: url('https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=1600&q=80'); }
+    .slide-2 { background-image: url('https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1600&q=80'); }
+    .slide-3 { background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80'); }
+    .slide-4 { background-image: url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1600&q=80'); }
+  </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">🌿 NATIONAL PARKS</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-icon">🌲</div>
+      <div class="logo-text">National Parks<span>Explore the Wild</span></div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero" class="active">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="parks.html">Parks List</a></li>
+      <li><a href="animal-info.html">Animal Info</a></li>
+      <li><a href="sitemap.html">Site Map</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="contact.html">Contact Us</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO SLIDER -->
+<section id="hero">
+  <div class="hero-slide slide-1"></div>
+  <div class="hero-slide slide-2"></div>
+  <div class="hero-slide slide-3"></div>
+  <div class="hero-slide slide-4"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge"><i class="fas fa-leaf"></i> World's Natural Wonders</div>
+    <h1 class="hero-title">Explore<em>National Parks</em></h1>
+    <p class="hero-subtitle">Journey through Earth's most spectacular wilderness areas. Discover rare wildlife, breathtaking landscapes, and unforgettable adventures.</p>
+    <div class="hero-btns">
+      <a href="parks.html" class="btn btn-primary"><i class="fas fa-map-marked-alt"></i> Explore Parks</a>
+      <a href="gallery.html" class="btn btn-outline"><i class="fas fa-images"></i> View Gallery</a>
+    </div>
+  </div>
+
+  <div class="hero-dots">
+    <button class="hero-dot" aria-label="Slide 1"></button>
+    <button class="hero-dot" aria-label="Slide 2"></button>
+    <button class="hero-dot" aria-label="Slide 3"></button>
+    <button class="hero-dot" aria-label="Slide 4"></button>
+  </div>
+  <div class="hero-arrows">
+    <button class="hero-arrow" id="prevSlide"><i class="fas fa-chevron-left"></i></button>
+    <button class="hero-arrow" id="nextSlide"><i class="fas fa-chevron-right"></i></button>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- STATS -->
+<div id="stats">
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-number" data-target="1200" data-suffix="+">0</div>
+      <div class="stat-label">National Parks</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" data-target="8500" data-suffix="+">0</div>
+      <div class="stat-label">Animal Species</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" data-target="195">0</div>
+      <div class="stat-label">Countries</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" data-target="2400000" data-suffix="+">0</div>
+      <div class="stat-label">Acres Protected</div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT INTRO -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-stack reveal">
+      <img class="about-img-main" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80" alt="Mountain National Park" />
+      <img class="about-img-accent" src="https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=600&q=80" alt="Wildlife in Park" />
+      <div class="about-badge-float">
+        <div class="about-badge-num">50+</div>
+        <div class="about-badge-txt">Years of Conservation</div>
+      </div>
+    </div>
+    <div class="about-text reveal reveal-delay-2">
+      <div class="section-tag">Our Mission</div>
+      <h2>Protecting Earth's <em style="color:var(--green-mid)">Natural Heritage</em></h2>
+      <p>National Parks are the jewels of our planet — vast wilderness areas set aside for the protection of natural ecosystems, wildlife habitats, and cultural landscapes. This portal brings you closer to these magnificent spaces.</p>
+      <p>From dense rainforests to sweeping savannas, from towering mountain ranges to pristine coral reefs, national parks preserve the world's most extraordinary environments for generations to come.</p>
+      <div class="about-features">
+        <div class="about-feature">
+          <div class="about-feature-icon">🦁</div>
+          <div><div class="about-feature-title">Wildlife Protection</div><div class="about-feature-desc">Home to endangered & rare species</div></div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">🌍</div>
+          <div><div class="about-feature-title">Global Coverage</div><div class="about-feature-desc">Parks across every continent</div></div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">🌿</div>
+          <div><div class="about-feature-title">Ecosystem Preservation</div><div class="about-feature-desc">Protecting biodiversity hotspots</div></div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">📍</div>
+          <div><div class="about-feature-title">Easy Navigation</div><div class="about-feature-desc">Maps & geolocation support</div></div>
+        </div>
+      </div>
+      <a href="about.html" class="btn btn-primary">Learn More <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PARKS -->
+<section id="featured-parks">
+  <div class="section-header">
+    <div class="section-tag">Featured Destinations</div>
+    <h2 class="section-title">Iconic <em>National Parks</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc">Discover some of the world's most spectacular and beloved national park destinations.</p>
+  </div>
+
+  <div class="parks-grid">
+    <!-- Card 1 -->
+    <div class="park-card reveal">
+      <div class="park-img">
+        <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=600&q=80" alt="Yellowstone National Park" loading="lazy" />
+        <span class="park-badge">USA</span>
+        <span class="park-rating">⭐ 4.9</span>
+      </div>
+      <div class="park-info">
+        <h3 class="park-name">Yellowstone National Park</h3>
+        <div class="park-location"><i class="fas fa-map-marker-alt"></i> Wyoming, USA</div>
+        <p class="park-desc">The world's first national park, famous for geysers, hot springs, and abundant wildlife including bison and grizzly bears.</p>
+        <div class="park-tags">
+          <span class="park-tag">🐻 Bears</span>
+          <span class="park-tag">🦬 Bison</span>
+          <span class="park-tag">🌋 Geysers</span>
+        </div>
+        <div class="park-footer">
+          <div class="park-fee">Entry: <strong>$35/vehicle</strong></div>
+          <a href="parks.html" class="park-btn">Explore →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="park-card reveal reveal-delay-1">
+      <div class="park-img">
+        <img src="download (2).jpg" alt="Serengeti National Park" loading="lazy" />
+        <span class="park-badge">Tanzania</span>
+        <span class="park-rating">⭐ 4.9</span>
+      </div
+      <div class="park-info">
+        <h3 class="park-name">Serengeti National Park</h3>
+        <div class="park-location"><i class="fas fa-map-marker-alt"></i> Tanzania, Africa</div>
+        <p class="park-desc">Witness the greatest wildlife spectacle on Earth — the annual Great Migration of over 1.5 million wildebeest across the plains.</p>
+        <div class="park-tags">
+          <span class="park-tag">🦁 Lions</span>
+          <span class="park-tag">🐘 Elephants</span>
+          <span class="park-tag">🦒 Giraffes</span>
+        </div>
+        <div class="park-footer">
+          <div class="park-fee">Entry: <strong>$70/day</strong></div>
+          <a href="parks.html" class="park-btn">Explore →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="park-card reveal reveal-delay-2">
+      <div class="park-img">
+        <img src="https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=600&q=80" alt="Amazon National Park" loading="lazy" />
+        <span class="park-badge">Brazil</span>
+        <span class="park-rating">⭐ 4.8</span>
+      </div>
+      <div class="park-info">
+        <h3 class="park-name">Amazon National Park</h3>
+        <div class="park-location"><i class="fas fa-map-marker-alt"></i> Amazonas, Brazil</div>
+        <p class="park-desc">The lungs of the Earth — a vast tropical rainforest harboring millions of species of insects, plants, birds, and other forms of life.</p>
+        <div class="park-tags">
+          <span class="park-tag">🐆 Jaguars</span>
+          <span class="park-tag">🦜 Macaws</span>
+          <span class="park-tag">🌴 Rainforest</span>
+        </div>
+        <div class="park-footer">
+          <div class="park-fee">Entry: <strong>Free</strong></div>
+          <a href="parks.html" class="park-btn">Explore →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="park-card reveal">
+      <div class="park-img">
+        <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?w=600&q=80" alt="Jim Corbett National Park" loading="lazy" />
+        <span class="park-badge">India</span>
+        <span class="park-rating">⭐ 4.8</span>
+      </div>
+      <div class="park-info">
+        <h3 class="park-name">Jim Corbett National Park</h3>
+        <div class="park-location"><i class="fas fa-map-marker-alt"></i> Uttarakhand, India</div>
+        <p class="park-desc">India's oldest national park, renowned for Bengal tigers, Asian elephants, and over 600 species of birds in the Himalayan foothills.</p>
+        <div class="park-tags">
+          <span class="park-tag">🐯 Tigers</span>
+          <span class="park-tag">🐘 Elephants</span>
+          <span class="park-tag">🦅 Eagles</span>
+        </div>
+        <div class="park-footer">
+          <div class="park-fee">Entry: <strong>₹2,500</strong></div>
+          <a href="parks.html" class="park-btn">Explore →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="park-card reveal reveal-delay-1">
+      <div class="park-img">
+        <img src="https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?w=600&q=80" alt="Banff National Park" loading="lazy" />
+        <span class="park-badge">Canada</span>
+        <span class="park-rating">⭐ 4.9</span>
+      </div>
+      <div class="park-info">
+        <h3 class="park-name">Banff National Park</h3>
+        <div class="park-location"><i class="fas fa-map-marker-alt"></i> Alberta, Canada</div>
+        <p class="park-desc">Canada's oldest national park with stunning turquoise lakes, glaciers, and rugged mountain terrain in the Canadian Rockies.</p>
+        <div class="park-tags">
+          <span class="park-tag">🦌 Elk</span>
+          <span class="park-tag">🐺 Wolves</span>
+          <span class="park-tag">❄️ Glaciers</span>
+        </div>
+        <div class="park-footer">
+          <div class="park-fee">Entry: <strong>CA$10/day</strong></div>
+          <a href="parks.html" class="park-btn">Explore →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="park-card reveal reveal-delay-2">
+      <div class="park-img">
+        <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=80" alt="Great Barrier Reef Marine Park" loading="lazy" />
+        <span class="park-badge">Australia</span>
+        <span class="park-rating">⭐ 5.0</span>
+      </div>
+      <div class="park-info">
+        <h3 class="park-name">Great Barrier Reef Park</h3>
+        <div class="park-location"><i class="fas fa-map-marker-alt"></i> Queensland, Australia</div>
+        <p class="park-desc">The world's largest coral reef system, stretching over 2,300 km, hosting thousands of marine species in crystal-clear waters.</p>
+        <div class="park-tags">
+          <span class="park-tag">🐢 Sea Turtles</span>
+          <span class="park-tag">🦈 Sharks</span>
+          <span class="park-tag">🐠 Coral</span>
+        </div>
+        <div class="park-footer">
+          <div class="park-fee">Entry: <strong>AU$6.50</strong></div>
+          <a href="parks.html" class="park-btn">Explore →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANIMALS SECTION -->
+<section id="animals">
+  <div class="section-header">
+    <div class="section-tag" style="background:rgba(82,183,136,0.2);color:var(--green-light);border-color:rgba(82,183,136,0.3)">Wildlife</div>
+    <h2 class="section-title">Amazing <em style="color:var(--green-light)">Wildlife</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc">Meet the extraordinary creatures that call these parks home.</p>
+  </div>
+
+  <div class="animals-grid">
+    <div class="animal-card reveal">
+      <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=400&q=80" alt="Lion" loading="lazy" />
+      <div class="animal-overlay">
+        <div class="animal-type">Mammal</div>
+        <div class="animal-name">African Lion</div>
+        <div class="animal-desc">The king of the African savanna, found in Serengeti and Kruger National Parks. Lions live in prides and are apex predators.</div>
+      </div>
+    </div>
+    <div class="animal-card reveal reveal-delay-1">
+      <img src="https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=400&q=80" alt="Tiger" loading="lazy" />
+      <div class="animal-overlay">
+        <div class="animal-type">Mammal</div>
+        <div class="animal-name">Bengal Tiger</div>
+        <div class="animal-desc">The world's largest wild cat, endangered and protected in India's Jim Corbett and Ranthambore National Parks.</div>
+      </div>
+    </div>
+    <div class="animal-card reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=400&q=80" alt="Elephant" loading="lazy" />
+      <div class="animal-overlay">
+        <div class="animal-type">Mammal</div>
+        <div class="animal-name">African Elephant</div>
+        <div class="animal-desc">Earth's largest land animal, a keystone species in African ecosystems. Found in Serengeti, Amboseli, and Kruger Parks.</div>
+      </div>
+    </div>
+    <div class="animal-card reveal reveal-delay-3">
+      <img src="https://images.unsplash.com/photo-1501706362039-c06b2d715385?w=400&q=80" alt="Eagle" loading="lazy" />
+      <div class="animal-overlay">
+        <div class="animal-type">Bird</div>
+        <div class="animal-name">Bald Eagle</div>
+        <div class="animal-desc">The symbol of America, soaring above Yellowstone and the Pacific Northwest, with a wingspan up to 8 feet wide.</div>
+      </div>
+    </div>
+    <div class="animal-card reveal">
+      <img src="https://images.unsplash.com/photo-1520813792240-56fc4a3765a7?w=400&q=80" alt="Deer" loading="lazy" />
+      <div class="animal-overlay">
+        <div class="animal-type">Mammal</div>
+        <div class="animal-name">White-Tailed Deer</div>
+        <div class="animal-desc">One of the most graceful park residents, found throughout North American national parks including Yellowstone and Smoky Mountains.</div>
+      </div>
+    </div>
+    <div class="animal-card reveal reveal-delay-1">
+      <img src="https://images.unsplash.com/photo-1607153333879-c174d265f1d2?w=400&q=80" alt="Flamingo" loading="lazy" />
+      <div class="animal-overlay">
+        <div class="animal-type">Bird</div>
+        <div class="animal-name">Flamingo</div>
+        <div class="animal-desc">These stunning pink birds are found in salty and alkaline lakes. Famous flocks gather at Lake Nakuru, Kenya.</div>
+      </div>
+    </div>
+    <div class="animal-card reveal reveal-delay-2">
+      <img src="https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=400&q=80" alt="Fox" loading="lazy" />
+      <div class="animal-overlay">
+        <div class="animal-type">Mammal</div>
+        <div class="animal-name">Red Fox</div>
+        <div class="animal-desc">Highly adaptable and cunning, red foxes are found across multiple continents in parks ranging from temperate to arctic.</div>
+      </div>
+    </div>
+    <div class="animal-card reveal reveal-delay-3">
+      <img src="https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=400&q=80" alt="Gorilla" loading="lazy" />
+      <div class="animal-overlay">
+        <div class="animal-type">Primate</div>
+        <div class="animal-name">Mountain Gorilla</div>
+        <div class="animal-desc">Critically endangered, mountain gorillas are protected in Bwindi Impenetrable Forest in Uganda and Virunga National Park.</div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:3rem">
+    <a href="animal-info.html" class="btn btn-primary reveal" style="display:inline-flex"><i class="fas fa-paw"></i> View All Wildlife</a>
+  </div>
+</section>
+
+<!-- MAP SECTION -->
+<section id="map-section">
+  <div class="section-header">
+    <div class="section-tag" style="background:rgba(82,183,136,0.2);color:var(--green-light);border-color:rgba(82,183,136,0.3)">Locations</div>
+    <h2 class="section-title" style="color:var(--white)">Park <em style="color:var(--green-light)">Locations</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc" style="color:rgba(255,255,255,0.6)">Explore the geographic spread of the world's greatest national parks.</p>
+  </div>
+  <div class="map-container">
+    <div class="map-frame">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d50000000!2d0!3d20!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="map-parks-list">
+      <div class="map-park-item reveal">
+        <div class="map-pin">🌋</div>
+        <div><div class="map-park-name">Yellowstone NP</div><div class="map-park-loc">Wyoming, USA</div></div>
+      </div>
+      <div class="map-park-item reveal reveal-delay-1">
+        <div class="map-pin">🦁</div>
+        <div><div class="map-park-name">Serengeti NP</div><div class="map-park-loc">Tanzania, Africa</div></div>
+      </div>
+      <div class="map-park-item reveal reveal-delay-2">
+        <div class="map-pin">🌴</div>
+        <div><div class="map-park-name">Amazon NP</div><div class="map-park-loc">Amazonas, Brazil</div></div>
+      </div>
+      <div class="map-park-item reveal reveal-delay-3">
+        <div class="map-pin">🐯</div>
+        <div><div class="map-park-name">Jim Corbett NP</div><div class="map-park-loc">Uttarakhand, India</div></div>
+      </div>
+      <div class="map-park-item reveal">
+        <div class="map-pin">❄️</div>
+        <div><div class="map-park-name">Banff NP</div><div class="map-park-loc">Alberta, Canada</div></div>
+      </div>
+      <div class="map-park-item reveal reveal-delay-1">
+        <div class="map-pin">🐠</div>
+        <div><div class="map-park-name">Great Barrier Reef</div><div class="map-park-loc">Queensland, Australia</div></div>
+      </div>
+      <div class="map-park-item reveal reveal-delay-2">
+        <div class="map-pin">🦒</div>
+        <div><div class="map-park-name">Kruger NP</div><div class="map-park-loc">South Africa</div></div>
+      </div>
+      <div class="map-park-item reveal reveal-delay-3">
+        <div class="map-pin">🦅</div>
+        <div><div class="map-park-name">Swiss NP</div><div class="map-park-loc">Graubünden, Switzerland</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY PREVIEW -->
+<section id="gallery">
+  <div class="section-header">
+    <div class="section-tag">Visual Journey</div>
+    <h2 class="section-title">Photo <em>Gallery</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc">A glimpse into the stunning beauty waiting in the world's national parks.</p>
+  </div>
+
+  <div class="gallery-filter">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="parks">Parks</button>
+    <button class="filter-btn" data-filter="animals">Animals</button>
+    <button class="filter-btn" data-filter="birds">Birds</button>
+    <button class="filter-btn" data-filter="nature">Nature</button>
+  </div>
+
+  <div class="gallery-grid">
+    <div class="gallery-item" data-category="parks">
+      <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=500&q=80" alt="Park Landscape" loading="lazy" />
+      <div class="gallery-overlay"><i class="fas fa-expand gallery-overlay-icon"></i></div>
+    </div>
+    <div class="gallery-item tall" data-category="animals">
+      <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=400&q=80" alt="Lion" loading="lazy" />
+      <div class="gallery-overlay"><i class="fas fa-expand gallery-overlay-icon"></i></div>
+    </div>
+    <div class="gallery-item" data-category="nature">
+      <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=500&q=80" alt="Forest" loading="lazy" />
+      <div class="gallery-overlay"><i class="fas fa-expand gallery-overlay-icon"></i></div>
+    </div>
+    <div class="gallery-item" data-category="birds">
+      <img src="https://images.unsplash.com/photo-1607153333879-c174d265f1d2?w=500&q=80" alt="Flamingo" loading="lazy" />
+      <div class="gallery-overlay"><i class="fas fa-expand gallery-overlay-icon"></i></div>
+    </div>
+    <div class="gallery-item" data-category="parks">
+      <img src="https://images.unsplash.com/photo-1608245449230-4ac19066d2d0?w=500&q=80" alt="Banff" loading="lazy" />
+      <div class="gallery-overlay"><i class="fas fa-expand gallery-overlay-icon"></i></div>
+    </div>
+    <div class="gallery-item" data-category="animals">
+      <img src="https://images.unsplash.com/photo-1564760055775-d63b17a55c44?w=500&q=80" alt="Elephant" loading="lazy" />
+      <div class="gallery-overlay"><i class="fas fa-expand gallery-overlay-icon"></i></div>
+    </div>
+    <div class="gallery-item" data-category="nature">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&q=80" alt="Ocean" loading="lazy" />
+      <div class="gallery-overlay"><i class="fas fa-expand gallery-overlay-icon"></i></div>
+    </div>
+    <div class="gallery-item" data-category="birds">
+      <img src="https://images.unsplash.com/photo-1501706362039-c06b2d715385?w=500&q=80" alt="Eagle" loading="lazy" />
+      <div class="gallery-overlay"><i class="fas fa-expand gallery-overlay-icon"></i></div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:3rem">
+    <a href="gallery.html" class="btn btn-primary"><i class="fas fa-images"></i> View Full Gallery</a>
+  </div>
+</section>
+
+<!-- CONTACT PREVIEW -->
+<section id="contact" style="background: linear-gradient(135deg, #f0f7f0, var(--cream))">
+  <div class="section-header">
+    <div class="section-tag">Get In Touch</div>
+    <h2 class="section-title">Contact <em>Us</em></h2>
+    <div class="section-line"></div>
+    <p class="section-desc">Have questions about national parks? We'd love to help.</p>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <h3>We're Here to Help</h3>
+      <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div>
+          <div class="contact-item-label">Address</div>
+          <div class="contact-item-value">Conservation House, Green Valley Road<br>Nature City, NC 10001</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📧</div>
+        <div>
+          <div class="contact-item-label">Email</div>
+          <div class="contact-item-value"><a href="mailto:info@nationalparks.com">info@nationalparks.com</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div>
+          <div class="contact-item-label">Phone</div>
+          <div class="contact-item-value">+1 (800) 123-PARK</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🕐</div>
+        <div>
+          <div class="contact-item-label">Hours</div>
+          <div class="contact-item-value">Mon – Fri: 9:00 AM – 6:00 PM<br>Weekends: 10:00 AM – 4:00 PM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form reveal reveal-delay-2">
+      <form id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" name="fname" placeholder="John" required />
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" name="lname" placeholder="Doe" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="john@example.com" required />
+        </div>
+        <div class="form-group">
+          <label for="subject">Subject</label>
+          <select id="subject" name="subject">
+            <option value="">Select a topic...</option>
+            <option>Park Information</option>
+            <option>Wildlife Inquiry</option>
+            <option>Visit Planning</option>
+            <option>Conservation</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell us how we can help..." required></textarea>
+        </div>
+        <button type="submit" class="form-submit">Send Message <i class="fas fa-paper-plane"></i></button>
+        <div class="form-success" id="formSuccess">✅ Thank you! Your message has been sent.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo" style="margin-bottom:1rem">
+        <div class="logo-icon">🌲</div>
+        <div class="logo-text">National Parks<span>Explore the Wild</span></div>
+      </div>
+      <p>Your digital gateway to the world's most magnificent natural treasures. Explore, learn, and be inspired to protect our planet's wild places.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="parks.html">Parks List</a></li>
+        <li><a href="animal-info.html">Animal Info</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Top Parks</h4>
+      <ul>
+        <li><a href="parks.html">Yellowstone</a></li>
+        <li><a href="parks.html">Serengeti</a></li>
+        <li><a href="parks.html">Amazon</a></li>
+        <li><a href="parks.html">Jim Corbett</a></li>
+        <li><a href="parks.html">Banff</a></li>
+        <li><a href="parks.html">Kruger</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Wildlife</h4>
+      <ul>
+        <li><a href="animal-info.html">Lions & Big Cats</a></li>
+        <li><a href="animal-info.html">Elephants</a></li>
+        <li><a href="animal-info.html">Eagles & Birds</a></li>
+        <li><a href="animal-info.html">Marine Life</a></li>
+        <li><a href="animal-info.html">Rare Species</a></li>
+        <li><a href="animal-info.html">Primates</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 National Parks Portal. Made with 🌿 for nature lovers worldwide.</p>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button class="lightbox-close">✕</button>
+  <img id="lightboxImg" src="" alt="Gallery Image" />
+</div>
+
+<!-- BACK TO TOP -->
+<button id="back-top" title="Back to Top"><i class="fas fa-arrow-up"></i></button>
+
+<script src="script.js"></script>
+</body>
+</html>
